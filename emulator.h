@@ -1,11 +1,30 @@
-#include <stdio.h>
-#include <stdlib.h>
+#ifndef _EMULATOR_H
+#define _EMULATOR_H
 
 #define uint8 unsigned char
 #define uint16 unsigned short
 
-struct CPU // 8080 cpu register flags etc
+struct Memory
 {
+    // full space of a 16 bit cpu
+    uint8 data[65536];
+
+    Memory() 
+    {
+        // clear the memory on Init
+        Clear();
+    }
+
+    void Clear()
+    {
+        // Set the full address space to 0
+        std::memset(data, 0, sizeof(data));
+    }
+};
+
+class CPU // 8080 cpu register flags etc
+{
+public:    
     // accumulator
     uint8 A;
 
@@ -55,30 +74,25 @@ struct CPU // 8080 cpu register flags etc
 
     Flags flags;
 
-    CPU() 
-    {
-        // on init, set all registers and flags to 0
-        A = 0x0;
-        BC = 0x0;
-        DE = 0x0;
-        HL = 0x0;
-        PC = 0x0;
-        SP = 0x0;
-        flags.S = 0x0;
-        flags.Z = 0x0;
-        flags.P = 0x0;
-        flags.C = 0x0;
-        flags.AC = 0x0;
-    }
+    CPU();    
 
-    void Reset() {
-        // The reset signal forces execution of commands located at address 0x0000. The content of other processor registers is not modified.
-        PC = 0x0;
+    void Reset();
+    void Tick(Memory* memory);
+
+    // opcode functions
+    void NopOpcode(Memory* memory); // 0x00
+
+    struct CPUOpcode
+    {
+        uint8 opcode;
+        uint8 size;
+        char const* name;
+        void (CPU::*handler)(Memory* data);
+    };
+
+    CPUOpcode opcodeRegister[0xFF] = {
+        {0x00, 0x01, "NOP", &CPU::NopOpcode},
     };
 };
 
-int main()
-{
-    CPU test = CPU();
-    return 0;
-}
+#endif
