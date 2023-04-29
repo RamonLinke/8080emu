@@ -38,20 +38,33 @@ void CPU::Tick(Memory* memory)
 
     // print debug info
     printf("0x%04X - 0x%02X - %s\n", PC, opcodeId, opcode.name);
-
-    // increment our Program Counter Register
-    PC += opcode.size;
 }
 
 void CPU::NopOpcode(Memory* memory)
 {
-    // do nothing
+    // do nothing apart from incrementing the Program Counter
+    PC += 0x01;
+}
+
+void CPU::LXI_B(Memory* memory)
+{
+    // store the data at the specified address into the register pair BC
+    B = (uint16)memory->data[SP+0x1];
+    C = (uint16)memory->data[SP+0x2];
+    
+    // increment the Program Counter
+    PC += 0x03;
 }
 
 int main()
 {
     CPU cpu = CPU();
     Memory mem = Memory();
+
+    uint16 i = 0;
+    mem.data[i++] = 0x01;
+    mem.data[i++] = 0xBA;
+    mem.data[i++] = 0xD0;
     while (1) 
     {
         cpu.Tick(&mem);
