@@ -82,17 +82,20 @@ public:
     // opcode functions
     void NopOpcode(Memory* memory); // 0x00
     void LXI_B(Memory* memory);     // 0x01
+    void STAX_B(Memory* memory);    // 0x02
+    void INX_B(Memory* memory);     // 0x03
 
     struct CPUOpcode
     {
-        uint8 opcode;
         char const* name;
         void (CPU::*handler)(Memory* data);
     };
 
     CPUOpcode opcodeRegister[0xFF] = {
-        {0x00, "NOP", &CPU::NopOpcode},
-        {0x01, "LXI B", &CPU::LXI_B},
+        {"NOP", &CPU::NopOpcode},
+        {"LXI B", &CPU::LXI_B},
+        {"STAX B", &CPU::STAX_B},
+        {"INX B", &CPU::INX_B},
     };
 };
 

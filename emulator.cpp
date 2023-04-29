@@ -48,12 +48,34 @@ void CPU::NopOpcode(Memory* memory)
 
 void CPU::LXI_B(Memory* memory)
 {
-    // store the data at the specified address into the register pair BC
+    // Store the data at the specified address into the register pair BC
     B = (uint16)memory->data[SP+0x1];
     C = (uint16)memory->data[SP+0x2];
     
     // increment the Program Counter
     PC += 0x03;
+}
+
+void CPU::STAX_B(Memory* memory)
+{
+    // Store A in memory address in register pair
+    uint16 pointer = static_cast<unsigned>(B) << 8 | static_cast<unsigned>(C);
+    memory->data[pointer] = A;
+
+    // increment the Program Counter
+    PC += 0x01;
+
+}void CPU::INX_B(Memory* memory)
+{
+    // Increment register pair
+    uint16 pairValue = static_cast<unsigned>(B) << 8 | static_cast<unsigned>(C);
+    pairValue++;
+    
+    B = (uint8)(pairValue >> 8);
+    C = (uint8)pairValue;
+
+    // increment the Program Counter
+    PC += 0x01;
 }
 
 int main()
