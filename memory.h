@@ -11,12 +11,16 @@
 class Memory
 {
 public:
-    // full space of a 16 bit cpu
-    uint8 data[65536];
-
     Memory();
 
+    uint8 Read(uint16 offset);
+    void Write(uint16 offset, uint8 val);
+
 private:
+
+    // full space of a 16 bit cpu
+    uint8 data[0xFFFF];
+
     void Clear();
 };
 

@@ -48,12 +48,12 @@ void CPU::Tick(Memory* mem)
 
 uint8 CPU::ReadPCByte(Memory* mem)
 {
-    return mem->data[PC++];
+    return mem->Read(PC++);
 }
 
 uint16 CPU::ReadPCWord(Memory* mem)
 {
-    return mem->data[PC++] << 8 | mem->data[PC++];
+    return mem->Read(PC++) << 8 | mem->Read(PC++);
 }
 
 void CPU::SetFlags(uint8 num)
@@ -87,7 +87,7 @@ void CPU::STAX(Memory* mem, uint16* reg)
 {
     // Store A in memory address in register pair
     uint16 memPtr = *reg;
-    mem->data[memPtr] = A;
+    mem->Write(memPtr, A);
 }
 
 void CPU::INX(Memory* mem, uint16* reg)
@@ -125,7 +125,7 @@ void CPU::DAD(Memory* mem, uint16* reg)
 void CPU::LDAX(Memory* mem, uint16* reg)
 {
     // Load A from memory address in register pair
-    A = mem->data[*reg];
+    A = mem->Read(*reg);
 }
 
 void CPU::DCX(Memory* mem, uint16* reg)
@@ -167,8 +167,8 @@ void CPU::RAR(Memory* mem)
 void CPU::SHLD(Memory* mem)
 {
     // Store HL at immediate address
-    mem->data[PC + 0x1] = ReadPCByte(mem);
-    mem->data[PC + 0x2] = ReadPCByte(mem);
+    mem->Write(PC, ReadPCByte(mem));
+    mem->Write(PC, ReadPCByte(mem));
 }
 
 void CPU::DAA(Memory* mem)
@@ -203,23 +203,25 @@ void CPU::CMA(Memory* mem)
 void CPU::STA(Memory* mem)
 {
     // Store A in memory
-    mem->data[ReadPCWord(mem)] = A;
+    mem->Write(ReadPCWord(mem), A);
 }
 
 void CPU::INR_M(Memory* mem)
 {
     // Increment Memory at [HL]
-    uint8* valPtr = &mem->data[HL];
-    (*valPtr)++;
-    SetFlags(*valPtr);
+    uint8 valPtr = mem->Read(HL);
+    valPtr++;
+    SetFlags(valPtr);
+    mem->Write(HL, valPtr);
 }
 
 void CPU::DCR_M(Memory* mem)
 {
     // Decrement Memory at [HL]
-    uint8* valPtr = &mem->data[HL];
-    (*valPtr)--;
-    SetFlags(*valPtr);
+    uint8 valPtr = mem->Read(HL);
+    valPtr--;
+    SetFlags(valPtr);
+    mem->Write(HL, valPtr);
 }
 
 void CPU::STC(Memory* mem)
@@ -231,7 +233,7 @@ void CPU::STC(Memory* mem)
 void CPU::LDA(Memory* mem)
 {
     // Load A from memory
-    A = mem->data[ReadPCWord(mem)];
+    A = mem->Read(ReadPCWord(mem));
 }
 
 void CPU::CMC(Memory* mem)
