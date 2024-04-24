@@ -121,6 +121,7 @@ private:
     void INR_H(Memory* mem) { INR(mem, &H); };
     void DCR_H(Memory* mem) { DCR(mem, &H); };
     void MVI_H(Memory* mem) { MVI(mem, &H); };
+    void DAA(Memory* mem);
 
 
     struct CPUOpcode
@@ -168,6 +169,7 @@ private:
         {&CPU::INX_H},      // 0x24
         {&CPU::DCR_H},      // 0x25
         {&CPU::MVI_H},      // 0x26
+        {&CPU::DAA},        // 0x27
 
     };
 };

@@ -170,3 +170,19 @@ void CPU::SHLD(Memory* mem)
     mem->data[PC + 0x1] = ReadPCByte(mem);
     mem->data[PC + 0x2] = ReadPCByte(mem);
 }
+
+void CPU::DAA(Memory* mem)
+{
+    // Decimal Adjust Accumulator
+    uint8 old_A = A;
+    if (((A & 0x0F) > 9) || flags.A)
+    {
+        A = A + 6;
+        flags.A = 1;
+    }
+    if (A > 0x99 || flags.C)
+    {
+        A = A + 0x60;
+        flags.C = 1;
+    }
+}
