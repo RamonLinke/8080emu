@@ -80,11 +80,18 @@ public:
     void Tick(Memory* memory);
 
     void SetFlags(uint8 num);
+
     // opcode functions
-    void NopOpcode(Memory* memory); // 0x00
+    void NOP(Memory* memory);       // 0x00, 0x08
     void LXI_B(Memory* memory);     // 0x01
     void STAX_B(Memory* memory);    // 0x02
     void INX_B(Memory* memory);     // 0x03
+    void INR_B(Memory* memory);     // 0x04
+    void DCR_B(Memory* memory);     // 0x05
+    void MVI_B(Memory* memory);     // 0x06
+    void RLC(Memory* memory);       // 0x07
+    // NOP
+    void DAD_B(Memory* memory);     // 0x09
 
     struct CPUOpcode
     {
@@ -93,10 +100,15 @@ public:
     };
 
     CPUOpcode opcodeRegister[0xFF] = {
-        {"NOP", &CPU::NopOpcode},
+        {"NOP", &CPU::NOP},
         {"LXI B", &CPU::LXI_B},
         {"STAX B", &CPU::STAX_B},
         {"INX B", &CPU::INX_B},
+        {"INR B", &CPU::INR_B},
+        {"DCR B", &CPU::DCR_B},
+        {"MVI B", &CPU::MVI_B},
+        {"RLC B", &CPU::RLC},
+        {"NOP 8", &CPU::NOP},
     };
 };
 

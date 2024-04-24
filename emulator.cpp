@@ -99,18 +99,70 @@ void CPU::STAX_B(Memory* memory)
     PC += 0x01;
 }
 
+void CPU::INR_B(Memory* memory)
+{
+    // Increment Register
+    B++;
+    SetFlags(B);
+
+    // increment the Program Counter
+    PC += 0x01;
+}
+
+void CPU::DCR_B(Memory* memory)
+{
+    // Decrement Register
+    B--;
+    SetFlags(B);
+
+    // increment the Program Counter
+    PC += 0x01;
+}
+
+void CPU::MVI_B(Memory* memory)
+{    
+    // Set B to operand (immediate)
+    uint8 operand = memory->data[PC + 0x1];
+    B = operand;
+
+    // increment the Program Counter
+    PC += 0x02;
+}
+
+void CPU::RLC(Memory* memory)
+{
+    // circular shift left
+    A = (A << 1) + (A >> 7);
+
+    // increment the Program Counter
+    PC += 0x01;
+}
+
+void CPU::DAD_B(Memory* memory)
+{
+    // circular shift left
+    A = (A << 1) + (A >> 7);
+
+    // increment the Program Counter
+    PC += 0x01;
+}
+
 int main()
 {
-    CPU cpu = CPU();
-    Memory mem = Memory();
+    CPU* cpu = new CPU();
+    Memory* mem = new Memory();
 
     uint16 i = 0;
-    mem.data[i++] = 0x01;
-    mem.data[i++] = 0xBA;
-    mem.data[i++] = 0xD0;
+    mem->data[i++] = 0x01;
+    mem->data[i++] = 0xBA;
+    mem->data[i++] = 0xD0;
     while (1) 
     {
-        cpu.Tick(&mem);
+        cpu->Tick(mem);
     }
+
+    delete cpu;
+    delete mem;
+
     return 0;
 }
