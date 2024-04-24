@@ -65,6 +65,9 @@ private:
 
     Flags flags;
 
+    uint8 ReadPCByte(Memory* mem);
+    uint16 ReadPCWord(Memory* mem);
+
     void SetFlags(uint8 num);
 
     // multi register cpu functions
