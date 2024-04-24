@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <cstring>
 
-#include "emulator.h"
+#include "cpu.h"
 
 CPU::CPU()
 {

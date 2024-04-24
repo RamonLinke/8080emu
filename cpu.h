@@ -1,28 +1,10 @@
-#ifndef _EMULATOR_H
-#define _EMULATOR_H
+#ifndef _CPU_H
+#define _CPU_H
 
 #include <math.h>
 
-#define uint8 unsigned char
-#define uint16 unsigned short
-
-struct Memory
-{
-    // full space of a 16 bit cpu
-    uint8 data[65536];
-
-    Memory() 
-    {
-        // clear the memory on Init
-        Clear();
-    }
-
-    void Clear()
-    {
-        // Set the full address space to 0
-        std::memset(data, 0, sizeof(data));
-    }
-};
+#include "memory.h"
+#include "defines.h"
 
 class CPU // 8080 cpu register flags etc
 {
@@ -74,12 +56,14 @@ public:
         bool C;  // set if the last addition operation resulted in a carry or if the last subtraction operation required a borrow
     };
 
-    Flags flags;
-
     CPU();    
 
     void Reset();
     void Tick(Memory* mem);
+
+private:
+
+    Flags flags;
 
     void SetFlags(uint8 num);
 
