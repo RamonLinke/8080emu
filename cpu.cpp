@@ -154,43 +154,7 @@ void CPU::DCX(Memory* mem, uint16* reg)
 }
 
 
-// opcodes
-void CPU::LXI_B(Memory* mem)
-{
-    // Store the data at the specified address into the register pair BC
-    LXI(mem, &BC);
-}
-
-void CPU::STAX_B(Memory* mem)
-{
-    // Store A in memory address in register pair BC
-    STAX(mem, &BC);
-}
-
-void CPU::INX_B(Memory* mem)
-{
-    // Increment register pair
-    INX(mem, &BC);
-}
-
-void CPU::INR_B(Memory* mem)
-{
-    // Increment B
-    INR(mem, &B);
-}
-
-void CPU::DCR_B(Memory* mem)
-{
-    // Decrement B
-    DCR(mem, &B);
-}
-
-void CPU::MVI_B(Memory* mem)
-{    
-    // Set B to operand (immediate)
-    MVI(mem, &B);
-}
-
+// unique opcodes
 void CPU::RLC(Memory* mem)
 {
     // Rotate A Left (Circular)
@@ -198,39 +162,6 @@ void CPU::RLC(Memory* mem)
 
     // increment the Program Counter
     PC += 0x01;
-}
-
-void CPU::DAD_B(Memory* mem)
-{
-    // increment HL with BC
-    DAD(mem, &BC);
-}
-
-void CPU::LDAX_B(Memory* mem)
-{
-    // load [BC] into A
-    LDAX(mem, &BC);
-}
-
-void CPU::DCX_B(Memory* mem)
-{
-    // load [BC] into A
-    DCX(mem, &BC);
-}
-
-void CPU::INR_C(Memory* mem)
-{
-    INR(mem, &C);
-}
-
-void CPU::DCR_C(Memory* mem)
-{
-    DCR(mem, &C);
-}
-
-void CPU::MVI_C(Memory* mem)
-{
-    MVI(mem, &C);
 }
 
 void CPU::RRC(Memory* mem)

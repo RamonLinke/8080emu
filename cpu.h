@@ -79,22 +79,23 @@ private:
     void DCX(Memory* mem, uint16* reg);
 
     // opcode functions
-    void NOP(Memory* mem);          // 0x00, 0x08
-    void LXI_B(Memory* mem);        // 0x01
-    void STAX_B(Memory* mem);       // 0x02
-    void INX_B(Memory* mem);        // 0x03
-    void INR_B(Memory* mem);        // 0x04
-    void DCR_B(Memory* mem);        // 0x05
-    void MVI_B(Memory* mem);        // 0x06
-    void RLC(Memory* mem);          // 0x07
-    // NOP                          // 0x08
-    void DAD_B(Memory* mem);        // 0x09
-    void LDAX_B(Memory* mem);       // 0x0A
-    void DCX_B(Memory* mem);        // 0x0B
-    void INR_C(Memory* mem);        // 0x0C
-    void DCR_C(Memory* mem);        // 0x0D
-    void MVI_C(Memory* mem);        // 0x0E
-    void RRC(Memory* mem);          // 0x0F
+    void NOP(Memory* mem);
+    void LXI_B(Memory* mem) { LXI(mem, &BC); };
+    void STAX_B(Memory* mem) { STAX(mem, &BC); };
+    void INX_B(Memory* mem) { INX(mem, &BC); };
+    void INR_B(Memory* mem) { INR(mem, &B); };
+    void DCR_B(Memory* mem) { DCR(mem, &B); };
+    void MVI_B(Memory* mem) { MVI(mem, &B); };
+    void RLC(Memory* mem);
+    void DAD_B(Memory* mem) { DAD(mem, &BC); };
+    void LDAX_B(Memory* mem) { LDAX(mem, &BC); };
+    void DCX_B(Memory* mem) { DCX(mem, &BC); };
+    void INR_C(Memory* mem) { INR(mem, &C); };
+    void DCR_C(Memory* mem) { DCR(mem, &C); };
+    void MVI_C(Memory* mem) { MVI(mem, &C); };
+    void RRC(Memory* mem);
+
+    // 0x10
 
 
 
