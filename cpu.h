@@ -110,7 +110,14 @@ private:
     void DCR_E(Memory* mem) { DCR(mem, &E); };
     void MVI_E(Memory* mem) { MVI(mem, &E); };
     void RAR(Memory* mem);
+
+    // 0x20
     void LXI_H(Memory* mem) { LXI(mem, &HL); };
+    void SHLD(Memory* mem);
+    void INX_H(Memory* mem) { INX(mem, &HL); };
+    void INR_H(Memory* mem) { INR(mem, &H); };
+    void DCR_H(Memory* mem) { DCR(mem, &H); };
+    void MVI_H(Memory* mem) { MVI(mem, &H); };
 
 
     struct CPUOpcode
@@ -153,6 +160,12 @@ private:
         {&CPU::RAR},        // 0x1F
         {&CPU::NOP},        // 0x20
         {&CPU::LXI_H},      // 0x21
+        {&CPU::SHLD},       // 0x22
+        {&CPU::INX_H},      // 0x23
+        {&CPU::INX_H},      // 0x24
+        {&CPU::DCR_H},      // 0x25
+        {&CPU::MVI_H},      // 0x26
+
     };
 };
 

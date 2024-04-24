@@ -194,3 +194,13 @@ void CPU::RAR(Memory* mem)
     // increment the Program Counter
     PC += 0x01;
 }
+
+void CPU::SHLD(Memory* mem)
+{
+    // Store HL at immediate address
+    mem->data[PC + 0x1] = L;
+    mem->data[PC + 0x2] = H;
+
+    // increment the Program Counter
+    PC += 0x03;
+}
