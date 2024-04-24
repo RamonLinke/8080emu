@@ -130,6 +130,22 @@ private:
     void MVI_L(Memory* mem) { MVI(mem, &L); };
     void CMA(Memory* mem);
 
+    // 0x30
+    void LXI_SP(Memory* mem) { LXI(mem, &SP); };
+    void STA(Memory* mem);
+    void INX_SP(Memory* mem) { INX(mem, &SP); };
+    void INR_M(Memory* mem);
+    void DCR_M(Memory* mem);
+    void MVI_M(Memory* mem) { MVI(mem, &H); };
+    void STC(Memory* mem);
+    void DAD_SP(Memory* mem) { DAD(mem, &HL); };
+    void LDA(Memory* mem);
+    void DCX_SP(Memory* mem) { DCX(mem, &HL); };
+    void INR_A(Memory* mem) { INR(mem, &L); };
+    void DCR_A(Memory* mem) { DCR(mem, &L); };
+    void MVI_A(Memory* mem) { MVI(mem, &L); };
+    void CMC(Memory* mem);
+
 
     struct CPUOpcode
     {
@@ -143,7 +159,8 @@ private:
         &CPU::NOP,   &CPU::LXI_D,  &CPU::STAX_D,  &CPU::INX_D,  &CPU::INR_D,  &CPU::DCR_D,  &CPU::MVI_D,  &CPU::RAL,   &CPU::NOP, &CPU::DAD_D, &CPU::LDAX_D,  &CPU::DCX_D,  &CPU::INR_E,  &CPU::DCR_E,  &CPU::MVI_E,  &CPU::RAR, 
     //  0x20(TODO)   0x21          0x22           0x23          0x24          0x25          0x26          0x27         0x28(TODO) 0x29         0x2A           0x2B          0x2C          0x2D          0x2E          0x2F
         &CPU::NOP,   &CPU::LXI_H,  &CPU::SHLD,    &CPU::INX_H,  &CPU::INX_H,  &CPU::DCR_H,  &CPU::MVI_H,  &CPU::DAA,   &CPU::NOP, &CPU::DAD_H, &CPU::LHLD,    &CPU::DCX_H,  &CPU::INR_L,  &CPU::DCR_L,  &CPU::MVI_L,  &CPU::CMA, 
-
+    //  0x30(TODO)   0x31          0x32           0x33          0x34          0x35          0x36          0x37         0x38(TODO) 0x39         0x3A           0x3B          0x3C          0x3D          0x3E          0x3F
+        &CPU::NOP,   &CPU::LXI_SP,    &CPU::STA,  &CPU::INR_M,  &CPU::DCR_M,  &CPU::DCR_M,  &CPU::MVI_M,  &CPU::STC,   &CPU::NOP, &CPU::DAD_SP,&CPU::LDA,    &CPU::DCX_SP,  &CPU::INR_A,  &CPU::DCR_A,  &CPU::MVI_A,  &CPU::CMC,
     };
 };
 

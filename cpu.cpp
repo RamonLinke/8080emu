@@ -199,3 +199,43 @@ void CPU::CMA(Memory* mem)
     // Complement A
     A = ~A;
 }
+
+void CPU::STA(Memory* mem)
+{
+    // Store A in memory
+    mem->data[ReadPCWord(mem)] = A;
+}
+
+void CPU::INR_M(Memory* mem)
+{
+    // Increment Memory at [HL]
+    uint8* valPtr = &mem->data[HL];
+    (*valPtr)++;
+    SetFlags(*valPtr);
+}
+
+void CPU::DCR_M(Memory* mem)
+{
+    // Decrement Memory at [HL]
+    uint8* valPtr = &mem->data[HL];
+    (*valPtr)--;
+    SetFlags(*valPtr);
+}
+
+void CPU::STC(Memory* mem)
+{
+    // Set Carry Flag
+    flags.C = 1;
+}
+
+void CPU::LDA(Memory* mem)
+{
+    // Load A from memory
+    A = mem->data[ReadPCWord(mem)];
+}
+
+void CPU::CMC(Memory* mem)
+{
+    // Load A from memory
+    flags.C = !flags.C;
+}
