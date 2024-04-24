@@ -85,39 +85,55 @@ public:
     void LXI(Memory* mem, uint16* reg);
     void STAX(Memory* mem, uint16* reg);
     void INX(Memory* mem, uint16* reg);
-    void INR(Memory* mem);
-    void DCR(Memory* mem);
-    void MVI(Memory* mem);
-    void DAD(Memory* mem);
+    void INR(Memory* mem, uint8* reg);
+    void DCR(Memory* mem, uint8* reg);
+    void MVI(Memory* mem, uint8* reg);
+    void DAD(Memory* mem, uint16* reg);
+    void LDAX(Memory* mem, uint16* reg);
+    void DCX(Memory* mem, uint16* reg);
 
     // opcode functions
-    void NOP(Memory* mem);       // 0x00, 0x08
-    void LXI_B(Memory* mem);     // 0x01
-    void STAX_B(Memory* mem);    // 0x02
-    void INX_B(Memory* mem);     // 0x03
-    void INR_B(Memory* mem);     // 0x04
-    void DCR_B(Memory* mem);     // 0x05
-    void MVI_B(Memory* mem);     // 0x06
-    void RLC(Memory* mem);       // 0x07
-    // NOP
-    void DAD_B(Memory* mem);     // 0x09
+    void NOP(Memory* mem);          // 0x00, 0x08
+    void LXI_B(Memory* mem);        // 0x01
+    void STAX_B(Memory* mem);       // 0x02
+    void INX_B(Memory* mem);        // 0x03
+    void INR_B(Memory* mem);        // 0x04
+    void DCR_B(Memory* mem);        // 0x05
+    void MVI_B(Memory* mem);        // 0x06
+    void RLC(Memory* mem);          // 0x07
+    // NOP                          // 0x08
+    void DAD_B(Memory* mem);        // 0x09
+    void LDAX_B(Memory* mem);       // 0x0A
+    void DCX_B(Memory* mem);        // 0x0B
+    void INR_C(Memory* mem);        // 0x0C
+    void DCR_C(Memory* mem);        // 0x0D
+    void MVI_C(Memory* mem);        // 0x0E
+    void RRC(Memory* mem);          // 0x0F
+
+
 
     struct CPUOpcode
     {
-        char const* name;
         void (CPU::*handler)(Memory* data);
     };
 
     CPUOpcode opcodeRegister[0xFF] = {
-        {"NOP", &CPU::NOP},
-        {"LXI B", &CPU::LXI_B},
-        {"STAX B", &CPU::STAX_B},
-        {"INX B", &CPU::INX_B},
-        {"INR B", &CPU::INR_B},
-        {"DCR B", &CPU::DCR_B},
-        {"MVI B", &CPU::MVI_B},
-        {"RLC B", &CPU::RLC},
-        {"NOP 8", &CPU::NOP},
+        {&CPU::NOP},
+        {&CPU::LXI_B},
+        {&CPU::STAX_B},
+        {&CPU::INX_B},
+        {&CPU::INR_B},
+        {&CPU::DCR_B},
+        {&CPU::MVI_B},
+        {&CPU::RLC},
+        {&CPU::NOP},
+        {&CPU::DAD_B},
+        {&CPU::LDAX_B},
+        {&CPU::DCX_B},
+        {&CPU::INR_C},
+        {&CPU::DCR_C},
+        {&CPU::MVI_C},
+        {&CPU::RRC},
     };
 };
 

@@ -43,7 +43,7 @@ void CPU::Tick(Memory* mem)
     (this->*opcode.handler)(mem);
 
     // print debug info
-    printf("0x%04X - 0x%02X - %s\n", PC, opcodeId, opcode.name);
+    printf("0x%04X - 0x%02X - %s\n", PC, opcodeId, "todo");
 }
 
 void CPU::SetFlags(uint8 num)
@@ -70,7 +70,7 @@ void CPU::NOP(Memory* mem)
 
 void CPU::LXI(Memory* mem, uint16* reg)
 {
-    // Store the data at the specified address into the register pair
+    // Load with immediate value B
     *reg = (uint16)mem->data[PC + 0x1];
 
     // increment the Program Counter
@@ -91,6 +91,63 @@ void CPU::INX(Memory* mem, uint16* reg)
 {
     // Increment register pair
     (*reg)++;
+
+    // increment the Program Counter
+    PC += 0x01;
+}
+
+void CPU::INR(Memory* mem, uint8* reg)
+{
+    // Increment Register
+    (*reg)++;
+    SetFlags(*reg);
+
+    // increment the Program Counter
+    PC += 0x01;
+}
+
+void CPU::DCR(Memory* mem, uint8* reg)
+{
+    // Increment Register
+    (*reg)--;
+    SetFlags(*reg);
+
+    // increment the Program Counter
+    PC += 0x01;
+}
+
+void CPU::MVI(Memory* mem, uint8* reg)
+{
+    // Load with immediate value
+    uint8 operand = mem->data[PC + 0x1];
+    *reg = operand;
+
+    // increment the Program Counter
+    PC += 0x02;
+}
+
+void CPU::DAD(Memory* mem, uint16* reg)
+{
+    // Double Add; register pair is added to HL
+    HL += *reg;
+
+    // increment the Program Counter
+    PC += 0x01;
+}
+
+void CPU::LDAX(Memory* mem, uint16* reg)
+{
+    // Load A from memory address in register pair
+    A = mem->data[*reg];
+
+    // increment the Program Counter
+    PC += 0x01;
+}
+
+void CPU::DCX(Memory* mem, uint16* reg)
+{
+    // Load A from memory address in register pair
+    (*reg)--;
 
     // increment the Program Counter
     PC += 0x01;
@@ -118,37 +175,25 @@ void CPU::INX_B(Memory* mem)
 
 void CPU::INR_B(Memory* mem)
 {
-    // Increment Register
-    B++;
-    SetFlags(B);
-
-    // increment the Program Counter
-    PC += 0x01;
+    // Increment B
+    INR(mem, &B);
 }
 
 void CPU::DCR_B(Memory* mem)
 {
-    // Decrement Register
-    B--;
-    SetFlags(B);
-
-    // increment the Program Counter
-    PC += 0x01;
+    // Decrement B
+    DCR(mem, &B);
 }
 
 void CPU::MVI_B(Memory* mem)
 {    
     // Set B to operand (immediate)
-    uint8 operand = mem->data[PC + 0x1];
-    B = operand;
-
-    // increment the Program Counter
-    PC += 0x02;
+    MVI(mem, &B);
 }
 
 void CPU::RLC(Memory* mem)
 {
-    // circular shift left
+    // Rotate A Left (Circular)
     A = (A << 1) + (A >> 7);
 
     // increment the Program Counter
@@ -157,11 +202,41 @@ void CPU::RLC(Memory* mem)
 
 void CPU::DAD_B(Memory* mem)
 {
-    // circular shift left
-    A = (A << 1) + (A >> 7);
+    // increment HL with BC
+    DAD(mem, &BC);
+}
 
-    // increment the Program Counter
-    PC += 0x01;
+void CPU::LDAX_B(Memory* mem)
+{
+    // load [BC] into A
+    LDAX(mem, &BC);
+}
+
+void CPU::DCX_B(Memory* mem)
+{
+    // load [BC] into A
+    DCX(mem, &BC);
+}
+
+void CPU::INR_C(Memory* mem)
+{
+    INR(mem, &C);
+}
+
+void CPU::DCR_C(Memory* mem)
+{
+    DCR(mem, &C);
+}
+
+void CPU::MVI_C(Memory* mem)
+{
+    MVI(mem, &C);
+}
+
+void CPU::RRC(Memory* mem)
+{
+    // Rotate A Right (Circular)
+    A = (A >> 1) + (A << 7);
 }
 
 int main()
