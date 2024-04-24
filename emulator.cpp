@@ -70,8 +70,8 @@ void CPU::NOP(Memory* memory)
 void CPU::LXI_B(Memory* memory)
 {
     // Store the data at the specified address into the register pair BC
-    B = (uint16)memory->data[SP+0x1];
-    C = (uint16)memory->data[SP+0x2];
+    B = (uint16)memory->data[PC + 0x1];
+    C = (uint16)memory->data[PC + 0x2];
     
     // increment the Program Counter
     PC += 0x03;
