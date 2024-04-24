@@ -96,7 +96,21 @@ private:
     void RRC(Memory* mem);
 
     // 0x10
-
+    void LXI_D(Memory* mem) { LXI(mem, &DE); };
+    void STAX_D(Memory* mem) { STAX(mem, &DE); };
+    void INX_D(Memory* mem) { INX(mem, &DE); };
+    void INR_D(Memory* mem) { INR(mem, &D); };
+    void DCR_D(Memory* mem) { DCR(mem, &D); };
+    void MVI_D(Memory* mem) { MVI(mem, &D); };
+    void RAL(Memory* mem);
+    void DAD_D(Memory* mem) { DAD(mem, &DE); };
+    void LDAX_D(Memory* mem) { LDAX(mem, &DE); };
+    void DCX_D(Memory* mem) { DCX(mem, &DE); };
+    void INR_E(Memory* mem) { INR(mem, &E); };
+    void DCR_E(Memory* mem) { DCR(mem, &E); };
+    void MVI_E(Memory* mem) { MVI(mem, &E); };
+    void RAR(Memory* mem);
+    void LXI_H(Memory* mem) { LXI(mem, &HL); };
 
 
     struct CPUOpcode
@@ -105,22 +119,40 @@ private:
     };
 
     CPUOpcode opcodeRegister[0xFF] = {
-        {&CPU::NOP},
-        {&CPU::LXI_B},
-        {&CPU::STAX_B},
-        {&CPU::INX_B},
-        {&CPU::INR_B},
-        {&CPU::DCR_B},
-        {&CPU::MVI_B},
-        {&CPU::RLC},
-        {&CPU::NOP},
-        {&CPU::DAD_B},
-        {&CPU::LDAX_B},
-        {&CPU::DCX_B},
-        {&CPU::INR_C},
-        {&CPU::DCR_C},
-        {&CPU::MVI_C},
-        {&CPU::RRC},
+        {&CPU::NOP},        // 0x00
+        {&CPU::LXI_B},      // 0x01
+        {&CPU::STAX_B},     // 0x02
+        {&CPU::INX_B},      // 0x03
+        {&CPU::INR_B},      // 0x04
+        {&CPU::DCR_B},      // 0x05
+        {&CPU::MVI_B},      // 0x06
+        {&CPU::RLC},        // 0x07
+        {&CPU::NOP},        // 0x08
+        {&CPU::DAD_B},      // 0x09
+        {&CPU::LDAX_B},     // 0x0A
+        {&CPU::DCX_B},      // 0x0B
+        {&CPU::INR_C},      // 0x0C
+        {&CPU::DCR_C},      // 0x0D
+        {&CPU::MVI_C},      // 0x0E
+        {&CPU::RRC},        // 0x0F
+        {&CPU::NOP},        // 0x10
+        {&CPU::LXI_D},      // 0x11
+        {&CPU::STAX_D},     // 0x12
+        {&CPU::INX_D},      // 0x13
+        {&CPU::INR_D},      // 0x14
+        {&CPU::DCR_D},      // 0x15
+        {&CPU::MVI_D},      // 0x16
+        {&CPU::RAL},        // 0x17
+        {&CPU::NOP},        // 0x18
+        {&CPU::DAD_D},      // 0x19
+        {&CPU::LDAX_D},     // 0x1A
+        {&CPU::DCX_D},      // 0x1B
+        {&CPU::INR_E},      // 0x1C
+        {&CPU::DCR_E},      // 0x1D
+        {&CPU::MVI_E},      // 0x1E
+        {&CPU::RAR},        // 0x1F
+        {&CPU::NOP},        // 0x20
+        {&CPU::LXI_H},      // 0x21
     };
 };
 
