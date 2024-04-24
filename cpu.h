@@ -138,7 +138,7 @@ private:
         {&CPU::DCR_B},      // 0x05
         {&CPU::MVI_B},      // 0x06
         {&CPU::RLC},        // 0x07
-        {&CPU::NOP},        // 0x08
+        {&CPU::NOP},        // 0x08: TODO UNDEFINED OPCODE
         {&CPU::DAD_B},      // 0x09
         {&CPU::LDAX_B},     // 0x0A
         {&CPU::DCX_B},      // 0x0B
@@ -146,7 +146,7 @@ private:
         {&CPU::DCR_C},      // 0x0D
         {&CPU::MVI_C},      // 0x0E
         {&CPU::RRC},        // 0x0F
-        {&CPU::NOP},        // 0x10
+        {&CPU::NOP},        // 0x10: TODO UNDEFINED OPCODE
         {&CPU::LXI_D},      // 0x11
         {&CPU::STAX_D},     // 0x12
         {&CPU::INX_D},      // 0x13
@@ -154,7 +154,7 @@ private:
         {&CPU::DCR_D},      // 0x15
         {&CPU::MVI_D},      // 0x16
         {&CPU::RAL},        // 0x17
-        {&CPU::NOP},        // 0x18
+        {&CPU::NOP},        // 0x18: TODO UNDEFINED OPCODE
         {&CPU::DAD_D},      // 0x19
         {&CPU::LDAX_D},     // 0x1A
         {&CPU::DCX_D},      // 0x1B
@@ -162,7 +162,7 @@ private:
         {&CPU::DCR_E},      // 0x1D
         {&CPU::MVI_E},      // 0x1E
         {&CPU::RAR},        // 0x1F
-        {&CPU::NOP},        // 0x20
+        {&CPU::NOP},        // 0x20: TODO UNDEFINED OPCODE
         {&CPU::LXI_H},      // 0x21
         {&CPU::SHLD},       // 0x22
         {&CPU::INX_H},      // 0x23
@@ -170,6 +170,7 @@ private:
         {&CPU::DCR_H},      // 0x25
         {&CPU::MVI_H},      // 0x26
         {&CPU::DAA},        // 0x27
+        {&CPU::NOP},        // 0x28: TODO UNDEFINED OPCODE
 
     };
 };
