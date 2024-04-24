@@ -168,6 +168,9 @@ void CPU::RRC(Memory* mem)
 {
     // Rotate A Right (Circular)
     A = (A >> 1) + (A << 7);
+
+    // increment the Program Counter
+    PC += 0x01;
 }
 
 void CPU::RAL(Memory* mem)
@@ -176,6 +179,9 @@ void CPU::RAL(Memory* mem)
     bool carry = flags.C;
     flags.C = (A >> 7);
     A = (A << 1) | carry;
+
+    // increment the Program Counter
+    PC += 0x01;
 }
 
 void CPU::RAR(Memory* mem)
@@ -184,4 +190,7 @@ void CPU::RAR(Memory* mem)
     bool carry = flags.C;
     flags.C = (A & 1);
     A = (A >> 1) | (carry << 7);
+
+    // increment the Program Counter
+    PC += 0x01;
 }
