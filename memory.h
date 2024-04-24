@@ -19,7 +19,7 @@ public:
 private:
 
     // full space of a 16 bit cpu
-    uint8 data[0xFFFF];
+    uint8 data[0x10000];
 
     void Clear();
 };
