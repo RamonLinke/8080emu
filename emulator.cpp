@@ -238,23 +238,3 @@ void CPU::RRC(Memory* mem)
     // Rotate A Right (Circular)
     A = (A >> 1) + (A << 7);
 }
-
-int main()
-{
-    CPU* cpu = new CPU();
-    Memory* memory = new Memory();
-
-    uint16 i = 0;
-    memory->data[i++] = 0x00;
-    memory->data[i++] = 0x00;
-    memory->data[i++] = 0x03;
-    while (1) 
-    {
-        cpu->Tick(memory);
-    }
-
-    delete cpu;
-    delete memory;
-
-    return 0;
-}

@@ -1,6 +1,8 @@
 #ifndef _EMULATOR_H
 #define _EMULATOR_H
 
+#include <math.h>
+
 #define uint8 unsigned char
 #define uint16 unsigned short
 
