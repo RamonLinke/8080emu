@@ -77,21 +77,30 @@ public:
     CPU();    
 
     void Reset();
-    void Tick(Memory* memory);
+    void Tick(Memory* mem);
 
     void SetFlags(uint8 num);
 
+    // multi register cpu functions
+    void LXI(Memory* mem, uint16* reg);
+    void STAX(Memory* mem, uint16* reg);
+    void INX(Memory* mem, uint16* reg);
+    void INR(Memory* mem);
+    void DCR(Memory* mem);
+    void MVI(Memory* mem);
+    void DAD(Memory* mem);
+
     // opcode functions
-    void NOP(Memory* memory);       // 0x00, 0x08
-    void LXI_B(Memory* memory);     // 0x01
-    void STAX_B(Memory* memory);    // 0x02
-    void INX_B(Memory* memory);     // 0x03
-    void INR_B(Memory* memory);     // 0x04
-    void DCR_B(Memory* memory);     // 0x05
-    void MVI_B(Memory* memory);     // 0x06
-    void RLC(Memory* memory);       // 0x07
+    void NOP(Memory* mem);       // 0x00, 0x08
+    void LXI_B(Memory* mem);     // 0x01
+    void STAX_B(Memory* mem);    // 0x02
+    void INX_B(Memory* mem);     // 0x03
+    void INR_B(Memory* mem);     // 0x04
+    void DCR_B(Memory* mem);     // 0x05
+    void MVI_B(Memory* mem);     // 0x06
+    void RLC(Memory* mem);       // 0x07
     // NOP
-    void DAD_B(Memory* memory);     // 0x09
+    void DAD_B(Memory* mem);     // 0x09
 
     struct CPUOpcode
     {

@@ -31,16 +31,16 @@ void CPU::Reset()
     PC = 0x0;
 };
 
-void CPU::Tick(Memory* memory)
+void CPU::Tick(Memory* mem)
 {
     // grab opcodeId from the memory
-    uint8 opcodeId = memory->data[PC];
+    uint8 opcodeId = mem->data[PC];
 
     // get the opcode and other info from the register
     CPUOpcode &opcode = opcodeRegister[opcodeId];
 
     // jump to the handler function
-    (this->*opcode.handler)(memory);
+    (this->*opcode.handler)(mem);
 
     // print debug info
     printf("0x%04X - 0x%02X - %s\n", PC, opcodeId, opcode.name);
@@ -61,45 +61,62 @@ void CPU::SetFlags(uint8 num)
     flags.P = (parityBits & 1) == 0;
 }
 
-void CPU::NOP(Memory* memory)
+// multi register cpu functions
+void CPU::NOP(Memory* mem)
 {
     // do nothing apart from incrementing the Program Counter
     PC += 0x01;
 }
 
-void CPU::LXI_B(Memory* memory)
+void CPU::LXI(Memory* mem, uint16* reg)
 {
-    // Store the data at the specified address into the register pair BC
-    B = (uint16)memory->data[PC + 0x1];
-    C = (uint16)memory->data[PC + 0x2];
-    
+    // Store the data at the specified address into the register pair
+    *reg = (uint16)mem->data[PC + 0x1];
+
     // increment the Program Counter
     PC += 0x03;
 }
 
-void CPU::STAX_B(Memory* memory)
+void CPU::STAX(Memory* mem, uint16* reg)
 {
     // Store A in memory address in register pair
-    uint16 pointer = static_cast<unsigned>(B) << 8 | static_cast<unsigned>(C);
-    memory->data[pointer] = A;
-
-    // increment the Program Counter
-    PC += 0x01;
-
-}void CPU::INX_B(Memory* memory)
-{
-    // Increment register pair
-    uint16 pairValue = static_cast<unsigned>(B) << 8 | static_cast<unsigned>(C);
-    pairValue++;
-    
-    B = (uint8)(pairValue >> 8);
-    C = (uint8)pairValue;
+    uint16 memPtr = *reg;
+    mem->data[memPtr] = A;
 
     // increment the Program Counter
     PC += 0x01;
 }
 
-void CPU::INR_B(Memory* memory)
+void CPU::INX(Memory* mem, uint16* reg)
+{
+    // Increment register pair
+    (*reg)++;
+
+    // increment the Program Counter
+    PC += 0x01;
+}
+
+
+// opcodes
+void CPU::LXI_B(Memory* mem)
+{
+    // Store the data at the specified address into the register pair BC
+    LXI(mem, &BC);
+}
+
+void CPU::STAX_B(Memory* mem)
+{
+    // Store A in memory address in register pair BC
+    STAX(mem, &BC);
+}
+
+void CPU::INX_B(Memory* mem)
+{
+    // Increment register pair
+    INX(mem, &BC);
+}
+
+void CPU::INR_B(Memory* mem)
 {
     // Increment Register
     B++;
@@ -109,7 +126,7 @@ void CPU::INR_B(Memory* memory)
     PC += 0x01;
 }
 
-void CPU::DCR_B(Memory* memory)
+void CPU::DCR_B(Memory* mem)
 {
     // Decrement Register
     B--;
@@ -119,17 +136,17 @@ void CPU::DCR_B(Memory* memory)
     PC += 0x01;
 }
 
-void CPU::MVI_B(Memory* memory)
+void CPU::MVI_B(Memory* mem)
 {    
     // Set B to operand (immediate)
-    uint8 operand = memory->data[PC + 0x1];
+    uint8 operand = mem->data[PC + 0x1];
     B = operand;
 
     // increment the Program Counter
     PC += 0x02;
 }
 
-void CPU::RLC(Memory* memory)
+void CPU::RLC(Memory* mem)
 {
     // circular shift left
     A = (A << 1) + (A >> 7);
@@ -138,7 +155,7 @@ void CPU::RLC(Memory* memory)
     PC += 0x01;
 }
 
-void CPU::DAD_B(Memory* memory)
+void CPU::DAD_B(Memory* mem)
 {
     // circular shift left
     A = (A << 1) + (A >> 7);
@@ -150,19 +167,19 @@ void CPU::DAD_B(Memory* memory)
 int main()
 {
     CPU* cpu = new CPU();
-    Memory* mem = new Memory();
+    Memory* memory = new Memory();
 
     uint16 i = 0;
-    mem->data[i++] = 0x01;
-    mem->data[i++] = 0xBA;
-    mem->data[i++] = 0xD0;
+    memory->data[i++] = 0x00;
+    memory->data[i++] = 0x00;
+    memory->data[i++] = 0x03;
     while (1) 
     {
-        cpu->Tick(mem);
+        cpu->Tick(memory);
     }
 
     delete cpu;
-    delete mem;
+    delete memory;
 
     return 0;
 }
