@@ -186,3 +186,10 @@ void CPU::DAA(Memory* mem)
         flags.C = 1;
     }
 }
+
+void CPU::LHLD(Memory* mem)
+{
+    // Load HL from immediate address
+    L = ReadPCByte(mem);
+    H = ReadPCByte(mem);
+}
