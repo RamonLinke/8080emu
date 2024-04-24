@@ -67,9 +67,9 @@ public:
     struct Flags {
         bool S;  // set if the result is negative.
         bool Z;  // set if the result is zero.
+        bool A;  // set if a carry or borrow has been generated out of the least significant four bits of the accumulator
         bool P;  // set if the number of 1 bits in the result is even.
         bool C;  // set if the last addition operation resulted in a carry or if the last subtraction operation required a borrow
-        bool AC; // used for binary-coded decimal arithmetic (BCD).
     };
 
     Flags flags;
@@ -79,6 +79,7 @@ public:
     void Reset();
     void Tick(Memory* memory);
 
+    void SetFlags(uint8 num);
     // opcode functions
     void NopOpcode(Memory* memory); // 0x00
     void LXI_B(Memory* memory);     // 0x01

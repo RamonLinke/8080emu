@@ -6,17 +6,23 @@
 CPU::CPU()
 {
     // on init, set all registers and flags to 0
+    // general registers
     A = 0x0;
     BC = 0x0;
     DE = 0x0;
-    HL = 0x0;
-    PC = 0x0;
-    SP = 0x0;
-    flags.S = 0x0;
-    flags.Z = 0x0;
-    flags.P = 0x0;
-    flags.C = 0x0;
-    flags.AC = 0x0;
+
+    // special registers
+    HL = 0x0;       // indirect access
+    PC = 0x0;       // program counter
+    SP = 0x0;       // stack pointer
+
+    // flags
+    flags.S = 0x0;  // signed
+    flags.Z = 0x0;  // zero
+    flags.A = 0x0;  // aux carry
+    flags.P = 0x0;  // parity
+    flags.C = 0x0;  // carry
+    //flags.AC = 0x0; // auxiliary carry
 }
 
 void CPU::Reset()
@@ -40,7 +46,22 @@ void CPU::Tick(Memory* memory)
     printf("0x%04X - 0x%02X - %s\n", PC, opcodeId, opcode.name);
 }
 
-void CPU::NopOpcode(Memory* memory)
+void CPU::SetFlags(uint8 num)
+{
+    // update cpu flags based on num
+    flags.S = num & 0b10000000; // signed flag
+    flags.Z = num == 0;         // zero flag
+    flags.A = num & 0b00001000; // aux carry
+
+    // calculate parity
+    uint8 parityBits = 0;
+    for (int i = 0; i < 8; i++)
+        parityBits += ((num >> i) & 1);
+
+    flags.P = (parityBits & 1) == 0;
+}
+
+void CPU::NOP(Memory* memory)
 {
     // do nothing apart from incrementing the Program Counter
     PC += 0x01;
