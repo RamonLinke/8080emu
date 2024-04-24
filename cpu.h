@@ -124,6 +124,11 @@ private:
     void DAA(Memory* mem);
     void DAD_H(Memory* mem) { DAD(mem, &HL); };
     void LHLD(Memory* mem);
+    void DCX_H(Memory* mem) { DCX(mem, &HL); };
+    void INR_L(Memory* mem) { INR(mem, &L); };
+    void DCR_L(Memory* mem) { DCR(mem, &L); };
+    void MVI_L(Memory* mem) { MVI(mem, &L); };
+    void CMA(Memory* mem);
 
 
     struct CPUOpcode
@@ -175,6 +180,11 @@ private:
         {&CPU::NOP},        // 0x28: TODO UNDEFINED OPCODE
         {&CPU::DAD_H},      // 0x29
         {&CPU::LHLD},       // 0x2A
+        {&CPU::DCX_H},      // 0x2B
+        {&CPU::INR_L},      // 0x2C
+        {&CPU::DCR_L},      // 0x2D
+        {&CPU::MVI_L},      // 0x2E
+        {&CPU::CMA},        // 0x2F
 
     };
 };

@@ -193,3 +193,9 @@ void CPU::LHLD(Memory* mem)
     L = ReadPCByte(mem);
     H = ReadPCByte(mem);
 }
+
+void CPU::CMA(Memory* mem)
+{
+    // Complement A
+    A = ~A;
+}
