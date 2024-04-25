@@ -167,6 +167,25 @@ private:
     void MOV_CM(Memory* mem) { MOV_MR(mem, &C); }
     void MOV_CA(Memory* mem) { MOV_RR(&C, &A); }
 
+    // 0x50
+    void MOV_DB(Memory* mem) { MOV_RR(&D, &B); }
+    void MOV_DC(Memory* mem) { MOV_RR(&D, &C); }
+    void MOV_DD(Memory* mem) { MOV_RR(&D, &D); }
+    void MOV_DE(Memory* mem) { MOV_RR(&D, &E); }
+    void MOV_DH(Memory* mem) { MOV_RR(&D, &H); }
+    void MOV_DL(Memory* mem) { MOV_RR(&D, &L); }
+    void MOV_DM(Memory* mem) { MOV_MR(mem, &D); }
+    void MOV_DA(Memory* mem) { MOV_RR(&D, &A); }
+    void MOV_EB(Memory* mem) { MOV_RR(&E, &B); }
+    void MOV_EC(Memory* mem) { MOV_RR(&E, &C); }
+    void MOV_ED(Memory* mem) { MOV_RR(&E, &D); }
+    void MOV_EE(Memory* mem) { MOV_RR(&E, &E); }
+    void MOV_EH(Memory* mem) { MOV_RR(&E, &H); }
+    void MOV_EL(Memory* mem) { MOV_RR(&E, &L); }
+    void MOV_EM(Memory* mem) { MOV_MR(mem, &E); }
+    void MOV_EA(Memory* mem) { MOV_RR(&E, &A); }
+
+
     struct CPUOpcode
     {
         void (CPU::*handler)(Memory* data);
@@ -183,6 +202,8 @@ private:
         &CPU::NOP,    &CPU::LXI_SP, &CPU::STA,    &CPU::INR_M,  &CPU::DCR_M,  &CPU::DCR_M,  &CPU::MVI_M,  &CPU::STC,    &CPU::NOP,    &CPU::DAD_SP, &CPU::LDA,    &CPU::DCX_SP, &CPU::INR_A,  &CPU::DCR_A,  &CPU::MVI_A,  &CPU::CMC,
     //  0x40          0x41          0x42          0x43          0x44          0x45          0x46          0x47          0x48          0x49          0x4A          0x4B          0x4C          0x4D          0x4E          0x4F
         &CPU::MOV_BB, &CPU::MOV_BC, &CPU::MOV_BD, &CPU::MOV_BE, &CPU::MOV_BH, &CPU::MOV_BL, &CPU::MOV_BM, &CPU::MOV_BA, &CPU::MOV_CB, &CPU::MOV_CC, &CPU::MOV_CD, &CPU::MOV_CE, &CPU::MOV_CH, &CPU::MOV_CL, &CPU::MOV_CM, &CPU::MOV_CA,
+    //  0x50          0x51          0x52          0x53          0x54          0x55          0x56          0x57          0x58          0x59          0x5A          0x5B          0x5C          0x5D          0x5E          0x5F
+        &CPU::MOV_DB, &CPU::MOV_DC, &CPU::MOV_DD, &CPU::MOV_DE, &CPU::MOV_DH, &CPU::MOV_DL, &CPU::MOV_DM, &CPU::MOV_DA, &CPU::MOV_EB, &CPU::MOV_EC, &CPU::MOV_ED, &CPU::MOV_EE, &CPU::MOV_EH, &CPU::MOV_EL, &CPU::MOV_EM, &CPU::MOV_EA,
     };
 };
 
