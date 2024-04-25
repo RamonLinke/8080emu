@@ -73,77 +73,77 @@ private:
     // multi register cpu functions
     void LXI(Memory* mem, uint16* reg);
     void STAX(Memory* mem, uint16* reg);
-    void INX(Memory* mem, uint16* reg);
-    void INR(Memory* mem, uint8* reg);
-    void DCR(Memory* mem, uint8* reg);
+    void INX(uint16* reg);
+    void INR(uint8* reg);
+    void DCR(uint8* reg);
     void MVI(Memory* mem, uint8* reg);
-    void DAD(Memory* mem, uint16* reg);
+    void DAD(uint16* reg);
     void LDAX(Memory* mem, uint16* reg);
-    void DCX(Memory* mem, uint16* reg);
+    void DCX(uint16* reg);
     void MOV(uint8* right, uint8* left);
 
     // opcode functions
     void NOP(Memory* mem);
     void LXI_B(Memory* mem) { LXI(mem, &BC); };
     void STAX_B(Memory* mem) { STAX(mem, &BC); };
-    void INX_B(Memory* mem) { INX(mem, &BC); };
-    void INR_B(Memory* mem) { INR(mem, &B); };
-    void DCR_B(Memory* mem) { DCR(mem, &B); };
+    void INX_B(Memory* mem) { INX(&BC); };
+    void INR_B(Memory* mem) { INR(&B); };
+    void DCR_B(Memory* mem) { DCR(&B); };
     void MVI_B(Memory* mem) { MVI(mem, &B); };
     void RLC(Memory* mem);
-    void DAD_B(Memory* mem) { DAD(mem, &BC); };
+    void DAD_B(Memory* mem) { DAD(&BC); };
     void LDAX_B(Memory* mem) { LDAX(mem, &BC); };
-    void DCX_B(Memory* mem) { DCX(mem, &BC); };
-    void INR_C(Memory* mem) { INR(mem, &C); };
-    void DCR_C(Memory* mem) { DCR(mem, &C); };
+    void DCX_B(Memory* mem) { DCX(&BC); };
+    void INR_C(Memory* mem) { INR(&C); };
+    void DCR_C(Memory* mem) { DCR(&C); };
     void MVI_C(Memory* mem) { MVI(mem, &C); };
     void RRC(Memory* mem);
 
     // 0x10
     void LXI_D(Memory* mem) { LXI(mem, &DE); };
     void STAX_D(Memory* mem) { STAX(mem, &DE); };
-    void INX_D(Memory* mem) { INX(mem, &DE); };
-    void INR_D(Memory* mem) { INR(mem, &D); };
-    void DCR_D(Memory* mem) { DCR(mem, &D); };
+    void INX_D(Memory* mem) { INX(&DE); };
+    void INR_D(Memory* mem) { INR(&D); };
+    void DCR_D(Memory* mem) { DCR(&D); };
     void MVI_D(Memory* mem) { MVI(mem, &D); };
     void RAL(Memory* mem);
-    void DAD_D(Memory* mem) { DAD(mem, &DE); };
+    void DAD_D(Memory* mem) { DAD(&DE); };
     void LDAX_D(Memory* mem) { LDAX(mem, &DE); };
-    void DCX_D(Memory* mem) { DCX(mem, &DE); };
-    void INR_E(Memory* mem) { INR(mem, &E); };
-    void DCR_E(Memory* mem) { DCR(mem, &E); };
+    void DCX_D(Memory* mem) { DCX(&DE); };
+    void INR_E(Memory* mem) { INR(&E); };
+    void DCR_E(Memory* mem) { DCR(&E); };
     void MVI_E(Memory* mem) { MVI(mem, &E); };
     void RAR(Memory* mem);
 
     // 0x20
     void LXI_H(Memory* mem) { LXI(mem, &HL); };
     void SHLD(Memory* mem);
-    void INX_H(Memory* mem) { INX(mem, &HL); };
-    void INR_H(Memory* mem) { INR(mem, &H); };
-    void DCR_H(Memory* mem) { DCR(mem, &H); };
+    void INX_H(Memory* mem) { INX(&HL); };
+    void INR_H(Memory* mem) { INR(&H); };
+    void DCR_H(Memory* mem) { DCR(&H); };
     void MVI_H(Memory* mem) { MVI(mem, &H); };
     void DAA(Memory* mem);
-    void DAD_H(Memory* mem) { DAD(mem, &HL); };
+    void DAD_H(Memory* mem) { DAD(&HL); };
     void LHLD(Memory* mem);
-    void DCX_H(Memory* mem) { DCX(mem, &HL); };
-    void INR_L(Memory* mem) { INR(mem, &L); };
-    void DCR_L(Memory* mem) { DCR(mem, &L); };
+    void DCX_H(Memory* mem) { DCX(&HL); };
+    void INR_L(Memory* mem) { INR(&L); };
+    void DCR_L(Memory* mem) { DCR(&L); };
     void MVI_L(Memory* mem) { MVI(mem, &L); };
     void CMA(Memory* mem);
 
     // 0x30
     void LXI_SP(Memory* mem) { LXI(mem, &SP); };
     void STA(Memory* mem);
-    void INX_SP(Memory* mem) { INX(mem, &SP); };
+    void INX_SP(Memory* mem) { INX(&SP); };
     void INR_M(Memory* mem);
     void DCR_M(Memory* mem);
     void MVI_M(Memory* mem) { MVI(mem, &H); };
     void STC(Memory* mem);
-    void DAD_SP(Memory* mem) { DAD(mem, &HL); };
+    void DAD_SP(Memory* mem) { DAD(&HL); };
     void LDA(Memory* mem);
-    void DCX_SP(Memory* mem) { DCX(mem, &HL); };
-    void INR_A(Memory* mem) { INR(mem, &L); };
-    void DCR_A(Memory* mem) { DCR(mem, &L); };
+    void DCX_SP(Memory* mem) { DCX(&HL); };
+    void INR_A(Memory* mem) { INR(&L); };
+    void DCR_A(Memory* mem) { DCR(&L); };
     void MVI_A(Memory* mem) { MVI(mem, &L); };
     void CMC(Memory* mem);
 

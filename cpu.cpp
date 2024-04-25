@@ -90,20 +90,20 @@ void CPU::STAX(Memory* mem, uint16* reg)
     mem->Write(memPtr, A);
 }
 
-void CPU::INX(Memory* mem, uint16* reg)
+void CPU::INX( uint16* reg)
 {
     // Increment register pair
     (*reg)++;
 }
 
-void CPU::INR(Memory* mem, uint8* reg)
+void CPU::INR(uint8* reg)
 {
     // Increment Register
     (*reg)++;
     SetFlags(*reg);
 }
 
-void CPU::DCR(Memory* mem, uint8* reg)
+void CPU::DCR(uint8* reg)
 {
     // Increment Register
     (*reg)--;
@@ -116,7 +116,7 @@ void CPU::MVI(Memory* mem, uint8* reg)
     *reg = ReadPCByte(mem);
 }
 
-void CPU::DAD(Memory* mem, uint16* reg)
+void CPU::DAD(uint16* reg)
 {
     // Double Add; register pair is added to HL
     HL += *reg;
@@ -128,7 +128,7 @@ void CPU::LDAX(Memory* mem, uint16* reg)
     A = mem->Read(*reg);
 }
 
-void CPU::DCX(Memory* mem, uint16* reg)
+void CPU::DCX(uint16* reg)
 {
     // Load A from memory address in register pair
     (*reg)--;
