@@ -134,6 +134,11 @@ void CPU::DCX(Memory* mem, uint16* reg)
     (*reg)--;
 }
 
+void CPU::MOV(uint8* right, uint8* left)
+{
+    *left = *right;
+}
+
 
 // unique opcodes
 void CPU::RLC(Memory* mem)
