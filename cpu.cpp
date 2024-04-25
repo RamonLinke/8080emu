@@ -43,7 +43,7 @@ void CPU::Tick(Memory* mem)
     uint8 opcodeId = ReadPCByte(mem);
 
     // get the opcode and other info from the register
-    CPUOpcode &opcode = opcodeRegister[opcodeId];
+    CPUOpcode &opcode = opcodeTable[opcodeId];
 
     // print debug info
     printf("0x%04X - 0x%02X - %s\n", PC, opcodeId, "todo");

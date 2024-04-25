@@ -229,7 +229,8 @@ private:
         void (CPU::*handler)(Memory* data);
     };
 
-    CPUOpcode opcodeRegister[0xFF] = {
+    // Holds the addresses to opcode functions
+    CPUOpcode opcodeTable[0xFF] = {
     //  0x00          0x01          0x02          0x03          0x04          0x05          0x06          0x07          0x08(TODO)    0x09          0x0A          0x0B          0x0C          0x0D          0x0E          0x0F
         &CPU::NOP,    &CPU::LXI_B,  &CPU::STAX_B, &CPU::INX_B,  &CPU::INR_B,  &CPU::DCR_B,  &CPU::MVI_B,  &CPU::RLC,    &CPU::NOP,    &CPU::DAD_B,  &CPU::LDAX_B, &CPU::DCX_B,  &CPU::INR_C,  &CPU::DCR_C,  &CPU::MVI_C,  &CPU::RRC,
     //  0x10(TODO)    0x11          0x12          0x13          0x14          0x15          0x16          0x17          0x18(TODO)    0x19          0x1A          0x1B          0x1C          0x1D          0x1E          0x1F
