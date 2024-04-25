@@ -22,28 +22,40 @@ CPU::CPU()
     flags.A = 0x0;  // aux carry
     flags.P = 0x0;  // parity
     flags.C = 0x0;  // carry
-    //flags.AC = 0x0; // auxiliary carry
+
+    // set running state
+    halted = false;
 }
 
 void CPU::Reset()
 {
     // The reset signal forces execution of commands located at address 0x0000. The content of other processor registers is not modified.
     PC = 0x0;
+    halted = false;
 };
 
 void CPU::Tick(Memory* mem)
 {
+    if (halted)
+        return;
+
     // grab opcodeId from the memory
     uint8 opcodeId = ReadPCByte(mem);
 
     // get the opcode and other info from the register
     CPUOpcode &opcode = opcodeRegister[opcodeId];
 
-    // jump to the handler function
-    (this->*opcode.handler)(mem);
-
     // print debug info
     printf("0x%04X - 0x%02X - %s\n", PC, opcodeId, "todo");
+
+    // jump to the handler function
+    (this->*opcode.handler)(mem);
+}
+
+void CPU::Halt()
+{
+    halted = true;
+    printf("CPU Halted externally");
 }
 
 uint8 CPU::ReadPCByte(Memory* mem)
@@ -257,4 +269,10 @@ void CPU::CMC(Memory* mem)
 {
     // Complement Carry flag
     flags.C = !flags.C;
+}
+
+void CPU::HLT(Memory* mem)
+{
+    halted = true;
+    printf("CPU Halted at 0x%04X", PC);
 }

@@ -56,14 +56,17 @@ public:
         bool C;  // set if the last addition operation resulted in a carry or if the last subtraction operation required a borrow
     };
 
-    CPU();    
+    CPU();
 
-    void Reset();
     void Tick(Memory* mem);
+
+    void Halt();
+    void Reset();
 
 private:
 
     Flags flags;
+    bool halted;
 
     uint8 ReadPCByte(Memory* mem);
     uint16 ReadPCWord(Memory* mem);
@@ -203,6 +206,24 @@ private:
     void MOV_LM(Memory* mem) { MOV_MR(&L, mem); }
     void MOV_LA(Memory* mem) { MOV_RR(&L, &A); }
 
+    // 0x70
+    void MOV_MB(Memory* mem) { MOV_RM(mem, &B); }
+    void MOV_MC(Memory* mem) { MOV_RM(mem, &C); }
+    void MOV_MD(Memory* mem) { MOV_RM(mem, &D); }
+    void MOV_ME(Memory* mem) { MOV_RM(mem, &E); }
+    void MOV_MH(Memory* mem) { MOV_RM(mem, &H); }
+    void MOV_ML(Memory* mem) { MOV_RM(mem, &L); }
+    void HLT(Memory* mem);
+    void MOV_MA(Memory* mem) { MOV_RM(mem, &A); }
+    void MOV_AB(Memory* mem) { MOV_RR(&A, &B); }
+    void MOV_AC(Memory* mem) { MOV_RR(&A, &C); }
+    void MOV_AD(Memory* mem) { MOV_RR(&A, &D); }
+    void MOV_AE(Memory* mem) { MOV_RR(&A, &E); }
+    void MOV_AH(Memory* mem) { MOV_RR(&A, &H); }
+    void MOV_AL(Memory* mem) { MOV_RR(&A, &L); }
+    void MOV_AM(Memory* mem) { MOV_MR(&A, mem); }
+    void MOV_AA(Memory* mem) { MOV_RR(&A, &A); }
+
     struct CPUOpcode
     {
         void (CPU::*handler)(Memory* data);
@@ -223,6 +244,8 @@ private:
         &CPU::MOV_DB, &CPU::MOV_DC, &CPU::MOV_DD, &CPU::MOV_DE, &CPU::MOV_DH, &CPU::MOV_DL, &CPU::MOV_DM, &CPU::MOV_DA, &CPU::MOV_EB, &CPU::MOV_EC, &CPU::MOV_ED, &CPU::MOV_EE, &CPU::MOV_EH, &CPU::MOV_EL, &CPU::MOV_EM, &CPU::MOV_EA,
     //  0x60          0x61          0x62          0x63          0x64          0x65          0x66          0x67          0x68          0x69          0x6A          0x6B          0x6C          0x6D          0x6E          0x6F
         &CPU::MOV_HB, &CPU::MOV_HC, &CPU::MOV_HD, &CPU::MOV_HE, &CPU::MOV_HH, &CPU::MOV_HL, &CPU::MOV_HM, &CPU::MOV_HA, &CPU::MOV_LB, &CPU::MOV_LC, &CPU::MOV_LD, &CPU::MOV_LE, &CPU::MOV_LH, &CPU::MOV_LL, &CPU::MOV_LM, &CPU::MOV_LA,
+    //  0x70          0x71          0x72          0x73          0x74          0x75          0x76          0x77          0x78          0x79          0x7A          0x7B          0x7C          0x7D          0x7E          0x7F
+        &CPU::MOV_MB, &CPU::MOV_MC, &CPU::MOV_MD, &CPU::MOV_ME, &CPU::MOV_MH, &CPU::MOV_ML, &CPU::HLT,    &CPU::MOV_MA, &CPU::MOV_AB, &CPU::MOV_AC, &CPU::MOV_AD, &CPU::MOV_AE, &CPU::MOV_AH, &CPU::MOV_AL, &CPU::MOV_AM, &CPU::MOV_AA,
     };
 };
 
