@@ -1,0 +1,1 @@
+This is a 8080 emulator written for educational purposes.
