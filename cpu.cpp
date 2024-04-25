@@ -238,6 +238,6 @@ void CPU::LDA(Memory* mem)
 
 void CPU::CMC(Memory* mem)
 {
-    // Load A from memory
+    // Complement Carry flag
     flags.C = !flags.C;
 }
