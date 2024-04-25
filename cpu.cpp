@@ -134,11 +134,23 @@ void CPU::DCX(uint16* reg)
     (*reg)--;
 }
 
-void CPU::MOV(uint8* right, uint8* left)
+void CPU::MOV_RR(uint8* fromReg, uint8* toReg)
 {
-    *left = *right;
+    // move register to register
+    *toReg = *fromReg;
 }
 
+void CPU::MOV_RM(Memory* mem, uint8* reg)
+{
+    // move from register to memory pointed by HL
+    mem->Write(*reg, HL);
+}
+
+void CPU::MOV_MR(Memory* mem, uint8* reg)
+{
+    // move from mem pointed by HL into register
+    *reg = mem->Read(HL);
+}
 
 // unique opcodes
 void CPU::RLC(Memory* mem)

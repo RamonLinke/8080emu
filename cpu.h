@@ -80,7 +80,9 @@ private:
     void DAD(uint16* reg);
     void LDAX(Memory* mem, uint16* reg);
     void DCX(uint16* reg);
-    void MOV(uint8* right, uint8* left);
+    void MOV_RR(uint8* fromReg, uint8* toReg);
+    void MOV_RM(Memory* mem, uint8* reg);
+    void MOV_MR(Memory* mem, uint8* reg);
 
     // opcode functions
     void NOP(Memory* mem);
@@ -148,12 +150,22 @@ private:
     void CMC(Memory* mem);
 
     // 0x40
-    void MOV_BB(Memory* mem) { MOV(&B, &B); }
-    void MOV_BC(Memory* mem) { MOV(&B, &C); }
-    void MOV_BD(Memory* mem) { MOV(&B, &D); }
-    void MOV_BE(Memory* mem) { MOV(&B, &E); }
-    void MOV_BH(Memory* mem) { MOV(&B, &H); }
-    void MOV_BL(Memory* mem) { MOV(&B, &L); }
+    void MOV_BB(Memory* mem) { MOV_RR(&B, &B); }
+    void MOV_BC(Memory* mem) { MOV_RR(&B, &C); }
+    void MOV_BD(Memory* mem) { MOV_RR(&B, &D); }
+    void MOV_BE(Memory* mem) { MOV_RR(&B, &E); }
+    void MOV_BH(Memory* mem) { MOV_RR(&B, &H); }
+    void MOV_BL(Memory* mem) { MOV_RR(&B, &L); }
+    void MOV_BM(Memory* mem) { MOV_MR(mem, &B); }
+    void MOV_BA(Memory* mem) { MOV_RR(&B, &A); }
+    void MOV_CB(Memory* mem) { MOV_RR(&C, &B); }
+    void MOV_CC(Memory* mem) { MOV_RR(&C, &C); }
+    void MOV_CD(Memory* mem) { MOV_RR(&C, &D); }
+    void MOV_CE(Memory* mem) { MOV_RR(&C, &E); }
+    void MOV_CH(Memory* mem) { MOV_RR(&C, &H); }
+    void MOV_CL(Memory* mem) { MOV_RR(&C, &L); }
+    void MOV_CM(Memory* mem) { MOV_MR(mem, &C); }
+    void MOV_CA(Memory* mem) { MOV_RR(&C, &A); }
 
     struct CPUOpcode
     {
@@ -161,16 +173,16 @@ private:
     };
 
     CPUOpcode opcodeRegister[0xFF] = {
-    //  0x00          0x01          0x02           0x03          0x04          0x05          0x06          0x07         0x08(TODO) 0x09         0x0A           0x0B          0x0C          0x0D          0x0E          0x0F
-        &CPU::NOP,    &CPU::LXI_B,  &CPU::STAX_B,  &CPU::INX_B,  &CPU::INR_B,  &CPU::DCR_B,  &CPU::MVI_B,  &CPU::RLC,   &CPU::NOP, &CPU::DAD_B, &CPU::LDAX_B,  &CPU::DCX_B,  &CPU::INR_C,  &CPU::DCR_C,  &CPU::MVI_C,  &CPU::RRC,
-    //  0x10(TODO)    0x11          0x12           0x13          0x14          0x15          0x16          0x17         0x18(TODO) 0x19         0x1A           0x1B          0x1C          0x1D          0x1E          0x1F
-        &CPU::NOP,    &CPU::LXI_D,  &CPU::STAX_D,  &CPU::INX_D,  &CPU::INR_D,  &CPU::DCR_D,  &CPU::MVI_D,  &CPU::RAL,   &CPU::NOP, &CPU::DAD_D, &CPU::LDAX_D,  &CPU::DCX_D,  &CPU::INR_E,  &CPU::DCR_E,  &CPU::MVI_E,  &CPU::RAR, 
-    //  0x20(TODO)    0x21          0x22           0x23          0x24          0x25          0x26          0x27         0x28(TODO) 0x29         0x2A           0x2B          0x2C          0x2D          0x2E          0x2F
-        &CPU::NOP,    &CPU::LXI_H,  &CPU::SHLD,    &CPU::INX_H,  &CPU::INX_H,  &CPU::DCR_H,  &CPU::MVI_H,  &CPU::DAA,   &CPU::NOP, &CPU::DAD_H, &CPU::LHLD,    &CPU::DCX_H,  &CPU::INR_L,  &CPU::DCR_L,  &CPU::MVI_L,  &CPU::CMA, 
-    //  0x30(TODO)    0x31          0x32           0x33          0x34          0x35          0x36          0x37         0x38(TODO) 0x39         0x3A           0x3B          0x3C          0x3D          0x3E          0x3F
-        &CPU::NOP,    &CPU::LXI_SP, &CPU::STA,     &CPU::INR_M,  &CPU::DCR_M,  &CPU::DCR_M,  &CPU::MVI_M,  &CPU::STC,   &CPU::NOP, &CPU::DAD_SP,&CPU::LDA,     &CPU::DCX_SP, &CPU::INR_A,  &CPU::DCR_A,  &CPU::MVI_A,  &CPU::CMC,
-    //  0x40          0x41          0x42           0x43          0x44          0x45          0x46          0x47         0x48       0x49         0x4A           0x4B          0x4C          0x4D          0x4E          0x4F
-        &CPU::MOV_BB, &CPU::MOV_BC, &CPU::MOV_BD,  &CPU::MOV_BE, &CPU::MOV_BH, &CPU::MOV_BL, &CPU::NOP,    &CPU::NOP,   &CPU::NOP, &CPU::NOP,   &CPU::NOP,     &CPU::NOP,   &CPU::NOP,     &CPU::NOP,    &CPU::NOP,    &CPU::NOP,
+    //  0x00          0x01          0x02          0x03          0x04          0x05          0x06          0x07          0x08(TODO)    0x09          0x0A          0x0B          0x0C          0x0D          0x0E          0x0F
+        &CPU::NOP,    &CPU::LXI_B,  &CPU::STAX_B, &CPU::INX_B,  &CPU::INR_B,  &CPU::DCR_B,  &CPU::MVI_B,  &CPU::RLC,    &CPU::NOP,    &CPU::DAD_B,  &CPU::LDAX_B, &CPU::DCX_B,  &CPU::INR_C,  &CPU::DCR_C,  &CPU::MVI_C,  &CPU::RRC,
+    //  0x10(TODO)    0x11          0x12          0x13          0x14          0x15          0x16          0x17          0x18(TODO)    0x19          0x1A          0x1B          0x1C          0x1D          0x1E          0x1F
+        &CPU::NOP,    &CPU::LXI_D,  &CPU::STAX_D, &CPU::INX_D,  &CPU::INR_D,  &CPU::DCR_D,  &CPU::MVI_D,  &CPU::RAL,    &CPU::NOP,    &CPU::DAD_D,  &CPU::LDAX_D, &CPU::DCX_D,  &CPU::INR_E,  &CPU::DCR_E,  &CPU::MVI_E,  &CPU::RAR, 
+    //  0x20(TODO)    0x21          0x22          0x23          0x24          0x25          0x26          0x27          0x28(TODO)    0x29          0x2A          0x2B          0x2C          0x2D          0x2E          0x2F
+        &CPU::NOP,    &CPU::LXI_H,  &CPU::SHLD,   &CPU::INX_H,  &CPU::INX_H,  &CPU::DCR_H,  &CPU::MVI_H,  &CPU::DAA,    &CPU::NOP,    &CPU::DAD_H,  &CPU::LHLD,   &CPU::DCX_H,  &CPU::INR_L,  &CPU::DCR_L,  &CPU::MVI_L,  &CPU::CMA, 
+    //  0x30(TODO)    0x31          0x32          0x33          0x34          0x35          0x36          0x37          0x38(TODO)    0x39          0x3A          0x3B          0x3C          0x3D          0x3E          0x3F
+        &CPU::NOP,    &CPU::LXI_SP, &CPU::STA,    &CPU::INR_M,  &CPU::DCR_M,  &CPU::DCR_M,  &CPU::MVI_M,  &CPU::STC,    &CPU::NOP,    &CPU::DAD_SP, &CPU::LDA,    &CPU::DCX_SP, &CPU::INR_A,  &CPU::DCR_A,  &CPU::MVI_A,  &CPU::CMC,
+    //  0x40          0x41          0x42          0x43          0x44          0x45          0x46          0x47          0x48          0x49          0x4A          0x4B          0x4C          0x4D          0x4E          0x4F
+        &CPU::MOV_BB, &CPU::MOV_BC, &CPU::MOV_BD, &CPU::MOV_BE, &CPU::MOV_BH, &CPU::MOV_BL, &CPU::MOV_BM, &CPU::MOV_BA, &CPU::MOV_CB, &CPU::MOV_CC, &CPU::MOV_CD, &CPU::MOV_CE, &CPU::MOV_CH, &CPU::MOV_CL, &CPU::MOV_CM, &CPU::MOV_CA,
     };
 };
 
