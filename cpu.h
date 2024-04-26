@@ -86,6 +86,8 @@ private:
     void MOV_RR(uint8* fromReg, uint8* toReg);
     void MOV_RM(Memory* mem, uint8* reg);
     void MOV_MR(uint8* reg, Memory* mem);
+    void ADD_R(uint8* reg);
+    void ADC_R(uint8* reg);
 
     // opcode functions
     void NOP(Memory* mem);
@@ -224,6 +226,24 @@ private:
     void MOV_AM(Memory* mem) { MOV_MR(&A, mem); }
     void MOV_AA(Memory* mem) { MOV_RR(&A, &A); }
 
+    // 0x80
+    void ADD_B(Memory* mem) { ADD_R(&B); }
+    void ADD_C(Memory* mem) { ADD_R(&C); }
+    void ADD_D(Memory* mem) { ADD_R(&D); }
+    void ADD_E(Memory* mem) { ADD_R(&E); }
+    void ADD_H(Memory* mem) { ADD_R(&H); }
+    void ADD_L(Memory* mem) { ADD_R(&L); }
+    void ADD_M(Memory* mem);
+    void ADD_A(Memory* mem) { ADD_R(&A); }
+    void ADC_B(Memory* mem) { ADC_R(&B); }
+    void ADC_C(Memory* mem) { ADC_R(&C); }
+    void ADC_D(Memory* mem) { ADC_R(&D); }
+    void ADC_E(Memory* mem) { ADC_R(&E); }
+    void ADC_H(Memory* mem) { ADC_R(&H); }
+    void ADC_L(Memory* mem) { ADC_R(&L); }
+    void ADC_M(Memory* mem);
+    void ADC_A(Memory* mem) { ADC_R(&A); }
+
     struct CPUOpcode
     {
         void (CPU::*handler)(Memory* data);
@@ -247,6 +267,8 @@ private:
         &CPU::MOV_HB, &CPU::MOV_HC, &CPU::MOV_HD, &CPU::MOV_HE, &CPU::MOV_HH, &CPU::MOV_HL, &CPU::MOV_HM, &CPU::MOV_HA, &CPU::MOV_LB, &CPU::MOV_LC, &CPU::MOV_LD, &CPU::MOV_LE, &CPU::MOV_LH, &CPU::MOV_LL, &CPU::MOV_LM, &CPU::MOV_LA,
     //  0x70          0x71          0x72          0x73          0x74          0x75          0x76          0x77          0x78          0x79          0x7A          0x7B          0x7C          0x7D          0x7E          0x7F
         &CPU::MOV_MB, &CPU::MOV_MC, &CPU::MOV_MD, &CPU::MOV_ME, &CPU::MOV_MH, &CPU::MOV_ML, &CPU::HLT,    &CPU::MOV_MA, &CPU::MOV_AB, &CPU::MOV_AC, &CPU::MOV_AD, &CPU::MOV_AE, &CPU::MOV_AH, &CPU::MOV_AL, &CPU::MOV_AM, &CPU::MOV_AA,
+    //  0x80          0x81          0x82          0x83          0x84          0x85          0x86          0x87          0x88          0x89          0x8A          0x8B          0x8C          0x8D          0x8E          0x8F
+        &CPU::ADD_B,  &CPU::ADD_C,  &CPU::ADD_D,  &CPU::ADD_E,  &CPU::ADD_H,  &CPU::ADD_L,  &CPU::ADD_M,  &CPU::ADD_A,  &CPU::ADC_B,  &CPU::ADC_C,  &CPU::ADC_D,  &CPU::ADC_E,  &CPU::ADC_H,  &CPU::ADC_L,  &CPU::ADC_M,  &CPU::ADC_A
     };
 };
 

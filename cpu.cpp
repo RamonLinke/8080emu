@@ -73,7 +73,6 @@ void CPU::SetFlags(uint8 num)
     // update cpu flags based on num
     flags.S = num & 0b10000000; // signed flag
     flags.Z = num == 0;         // zero flag
-    flags.A = num & 0b00001000; // aux carry
 
     // calculate parity
     uint8 parityBits = 0;
@@ -164,6 +163,56 @@ void CPU::MOV_MR(uint8* reg, Memory* mem)
     *reg = mem->Read(HL);
 }
 
+void CPU::ADD_R(uint8* reg) 
+{
+    // adds register to A
+    uint16 result16 = (uint16)A + ((uint16)*reg);
+    flags.C = result16 & 0xFF00;
+    flags.A = ((A & 0x0F) + (*reg & 0x0F)) > 0x0F;
+
+    uint8 result8 = result16;
+    SetFlags(result8);
+    A = result8;
+}
+
+void CPU::ADD_M(Memory* mem)
+{
+    // add from register to memory pointed by HL to A
+    uint8 read = mem->Read(HL);
+    uint16 result16 = (uint16)A + (uint16)read;
+    flags.C = result16 & 0xFF00;
+    flags.A = ((A & 0x0F) + (read & 0x0F)) > 0x0F;
+
+    uint8 result8 = result16;
+    SetFlags(result8);
+    A = result8;
+}
+
+void CPU::ADC_R(uint8* reg)
+{
+    // adds register to A
+    uint16 result16 = (uint16)A + ((uint16)*reg) + flags.C;
+    flags.C = result16 & 0xFF00;
+    flags.A = ((A & 0x0F) + (*reg & 0x0F)) > 0x0F;
+
+    uint8 result8 = result16;
+    SetFlags(result8);
+    A = result8;
+}
+
+void CPU::ADC_M(Memory* mem)
+{
+    // add from register to memory pointed by HL to A
+    uint8 read = mem->Read(HL);
+    uint16 result16 = (uint16)A + (uint16)read + flags.C;
+    flags.C = result16 & 0xFF00;
+    flags.A = ((A & 0x0F) + (read & 0x0F)) > 0x0F;
+
+    uint8 result8 = result16;
+    SetFlags(result8);
+    A = result8;
+}
+
 // unique opcodes
 void CPU::RLC(Memory* mem)
 {
@@ -240,6 +289,7 @@ void CPU::INR_M(Memory* mem)
     // Increment Memory at [HL]
     uint8 valPtr = mem->Read(HL);
     valPtr++;
+    flags.A = valPtr & 0b00001000; // aux carry
     SetFlags(valPtr);
     mem->Write(HL, valPtr);
 }
@@ -249,6 +299,7 @@ void CPU::DCR_M(Memory* mem)
     // Decrement Memory at [HL]
     uint8 valPtr = mem->Read(HL);
     valPtr--;
+    flags.A = valPtr & 0b00001000; // aux carry
     SetFlags(valPtr);
     mem->Write(HL, valPtr);
 }
