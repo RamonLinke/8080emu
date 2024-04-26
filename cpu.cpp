@@ -190,7 +190,7 @@ void CPU::ADD_M(Memory* mem)
 
 void CPU::ADC_R(uint8* reg)
 {
-    // adds register to A
+    // adds register to A with carry
     uint16 result16 = (uint16)A + ((uint16)*reg) + flags.C;
     flags.C = result16 & 0xFF00;
     flags.A = ((A & 0x0F) + (*reg & 0x0F)) > 0x0F;
@@ -202,10 +202,60 @@ void CPU::ADC_R(uint8* reg)
 
 void CPU::ADC_M(Memory* mem)
 {
-    // add from register to memory pointed by HL to A
+    // add from register to memory pointed by HL to A with carry
     uint8 read = mem->Read(HL);
     uint16 result16 = (uint16)A + (uint16)read + flags.C;
     flags.C = result16 & 0xFF00;
+    flags.A = ((A & 0x0F) + (read & 0x0F)) > 0x0F;
+
+    uint8 result8 = result16;
+    SetFlags(result8);
+    A = result8;
+}
+
+void CPU::SUB_R(uint8* reg)
+{
+    // subtracts register from A
+    uint16 result16 = (uint16)A - ((uint16)*reg);
+    flags.C = !(result16 & 0xFF00);
+    flags.A = ((A & 0x0F) + (*reg & 0x0F)) > 0x0F;
+
+    uint8 result8 = result16;
+    SetFlags(result8);
+    A = result8;
+}
+
+void CPU::SUB_M(Memory* mem)
+{
+    // subtracts memory pointed to by HL from A
+    uint8 read = mem->Read(HL);
+    uint16 result16 = (uint16)A - (uint16)read;
+    flags.C = result16 & 0xFF00;
+    flags.A = ((A & 0x0F) + (read & 0x0F)) > 0x0F;
+
+    uint8 result8 = result16;
+    SetFlags(result8);
+    A = result8;
+}
+
+void CPU::SBB_R(uint8* reg)
+{
+    // subtracts register from A with carry
+    uint16 result16 = (uint16)A - ((uint16)*reg) - flags.C;
+    flags.C = !(result16 & 0xFF00);
+    flags.A = ((A & 0x0F) + (*reg & 0x0F)) > 0x0F;
+
+    uint8 result8 = result16;
+    SetFlags(result8);
+    A = result8;
+}
+
+void CPU::SBB_M(Memory* mem)
+{
+    // subtracts memory pointed to by HL from A with carry
+    uint8 read = mem->Read(HL);
+    uint16 result16 = (uint16)A - (uint16)read - flags.C;
+    flags.C = !(result16 & 0xFF00);
     flags.A = ((A & 0x0F) + (read & 0x0F)) > 0x0F;
 
     uint8 result8 = result16;
