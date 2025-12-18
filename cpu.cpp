@@ -436,6 +436,14 @@ void CPU::PUSH_R(Memory* mem, uint16* reg)
     PushSPWord(mem, reg);
 }
 
+void CPU::RST(Memory* mem, uint8 num)
+{
+    // pushes PC and jumps to address at num * 0x8
+    uint16 address = num * 0x8;
+    PushSPWord(mem, &PC);
+    PC = address;
+}
+
 void CPU::RET(Memory* mem)
 {
     // pop PC from the stack

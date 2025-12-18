@@ -112,6 +112,7 @@ private:
     void CMP_R(uint8* reg);
     void POP_R(Memory* mem, uint16* reg);
     void PUSH_R(Memory* mem, uint16* reg);
+    void RST(Memory* mem, uint8 num);
 
     // opcode functions
     void NOP(Memory* mem);
@@ -330,9 +331,11 @@ private:
     void CNZ(Memory* mem);
     void PUSH_B(Memory* mem) { PUSH_R(mem, &BC); }
     void ADI(Memory* mem);
+    void RST0(Memory* mem) { RST(mem, 0); }
     void RZ(Memory* mem);
     void RET(Memory* mem);
     void CALL(Memory* mem);
+    void RST1(Memory* mem) { RST(mem, 1); }
 
     // 0xD0
     void RNC(Memory* mem);
@@ -341,7 +344,9 @@ private:
     void CNC(Memory* mem);
     void PUSH_D(Memory* mem) { PUSH_R(mem, &DE); }
     void SUI(Memory* mem);
+    void RST2(Memory* mem) { RST(mem, 2); }
     void RC(Memory* mem);
+    void RST3(Memory* mem) { RST(mem, 3); }
     
     // 0xE0
     void RPO(Memory* mem);
@@ -350,9 +355,11 @@ private:
     void CPO(Memory* mem);
     void PUSH_H(Memory* mem) { PUSH_R(mem, &HL); }
     void ANI(Memory* mem);
+    void RST4(Memory* mem) { RST(mem, 4); }
     void OUT(Memory* mem);
     void RPE(Memory* mem);
     void IN(Memory* mem);
+    void RST5(Memory* mem) { RST(mem, 5); }
     
     // 0xF0
     void RP(Memory* mem);
@@ -361,7 +368,9 @@ private:
     void CP(Memory* mem);
     void PUSH_PSW(Memory* mem);
     void ORI(Memory* mem);
+    void RST6(Memory* mem) { RST(mem, 6); }
     void RM(Memory* mem);
+    void RST7(Memory* mem) { RST(mem, 7); }
 
     struct CPUOpcode
     {
@@ -395,13 +404,13 @@ private:
     //  0xB0          0xB1          0xB2          0xB3          0xB4          0xB5          0xB6          0xB7          0xB8          0xB9          0xBA          0xBB          0xBC          0xBD          0xBE          0xBF
         &CPU::ORA_B,  &CPU::ORA_C,  &CPU::ORA_D,  &CPU::ORA_E,  &CPU::ORA_H,  &CPU::ORA_L,  &CPU::ORA_M,  &CPU::ORA_A,  &CPU::CMP_B,  &CPU::CMP_C,  &CPU::CMP_D,  &CPU::CMP_E,  &CPU::CMP_H,  &CPU::CMP_L,  &CPU::CMP_M,  &CPU::CMP_A,
     //  0xC0          0xC1          0xC2          0xC3          0xC4          0xC5          0xC6          0xC7          0xC8          0xC9          0xCA          0xCB          0xCC          0xCD          0xCE          0xCF
-        &CPU::RNZ,    &CPU::POP_B,  &CPU::JNZ,    &CPU::JMP,    &CPU::CNZ,    &CPU::PUSH_B, &CPU::ADI,     &CPU::TODO,   &CPU::RZ,     &CPU::RET,    &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::NOP,
+        &CPU::RNZ,    &CPU::POP_B,  &CPU::JNZ,    &CPU::JMP,    &CPU::CNZ,    &CPU::PUSH_B, &CPU::ADI,    &CPU::RST0,   &CPU::RZ,     &CPU::RET,    &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::CALL,  &CPU::TODO,   &CPU::RST1,
     //  0xD0          0xD1          0xD2          0xD3          0xD4          0xD5          0xD6          0xD7          0xD8          0xD9          0xDA          0xDB          0xDC          0xDD          0xDE          0xDF
-        &CPU::RNC,    &CPU::POP_D,  &CPU::JNC,    &CPU::OUT,    &CPU::CNC,    &CPU::PUSH_D, &CPU::SUI,    &CPU::TODO,   &CPU::RC,     &CPU::TODO,   &CPU::TODO,   &CPU::IN,     &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::NOP,
+        &CPU::RNC,    &CPU::POP_D,  &CPU::JNC,    &CPU::OUT,    &CPU::CNC,    &CPU::PUSH_D, &CPU::SUI,    &CPU::RST2,   &CPU::RC,     &CPU::TODO,   &CPU::TODO,   &CPU::IN,     &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::RST3,
     //  0xE0          0xE1          0xE2          0xE3          0xE4          0xE5          0xE6          0xE7          0xE8          0xE9          0xEA          0xEB          0xEC          0xED          0xEE          0xEF
-        &CPU::RPO,    &CPU::POP_H,  &CPU::JPO,    &CPU::TODO,   &CPU::CPO,    &CPU::PUSH_H, &CPU::ANI,    &CPU::TODO,   &CPU::RPE,    &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::NOP,
+        &CPU::RPO,    &CPU::POP_H,  &CPU::JPO,    &CPU::TODO,   &CPU::CPO,    &CPU::PUSH_H, &CPU::ANI,    &CPU::RST4,   &CPU::RPE,    &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::RST5,
     //  0xF0          0xF1          0xF2          0xF3          0xF4          0xF5          0xF6          0xF7          0xF8          0xF9          0xFA          0xFB          0xFC          0xFD          0xFE          0xFF
-        &CPU::RP,     &CPU::POP_PSW,&CPU::JP,     &CPU::TODO,   &CPU::CP,     &CPU::PUSH_PSW,&CPU::ORI,   &CPU::TODO,   &CPU::RM,     &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::NOP,
+        &CPU::RP,     &CPU::POP_PSW,&CPU::JP,     &CPU::TODO,   &CPU::CP,     &CPU::PUSH_PSW,&CPU::ORI,   &CPU::RST6,   &CPU::RM,     &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::RST7,
     };
 };
 
