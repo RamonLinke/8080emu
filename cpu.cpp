@@ -125,9 +125,9 @@ void CPU::SetFlags(uint8 num)
     flags.P = (parityBits & 1) == 0;
 }
 
-void CPU::TODO(Memory* mem)
+void CPU::ILL(Memory* mem)
 {
-    // opcode NYI
+    // illegal opcodes NYI
 }
 
 // multi register cpu functions
