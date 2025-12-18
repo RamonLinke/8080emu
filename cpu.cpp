@@ -101,11 +101,11 @@ uint16 CPU::PopSPWord(Memory* mem)
     return mem->Read(SP++) << 8 | mem->Read(SP++);
 }
 
-void CPU::PushSPWord(Memory* mem, uint16* reg)
+void CPU::PushSPWord(Memory* mem, uint16* data)
 {
     // write a word to the stack and decrement it
-    mem->Write(SP--, *reg & 0xFF);
-    mem->Write(SP--, *reg >> 8);
+    mem->Write(SP--, *data & 0xFF);
+    mem->Write(SP--, *data >> 8);
 }
 
 void CPU::SetFlags(uint8 num)
@@ -410,7 +410,20 @@ void CPU::PUSH_R(Memory* mem, uint16* reg)
 
 void CPU::RET(Memory* mem)
 {
-    // pop address on stack and jump
+    // pop PC from the stack
+    PC = PopSPWord(mem);
+}
+
+void CPU::CALL(Memory* mem)
+{
+    // push current PC on the stack and jump
+    PushSPWord(mem, &PC);
+    PC = PopSPWord(mem);
+}
+
+void CPU::JMP(Memory* mem)
+{
+    // move the PC to an imm address
     PC = PopSPWord(mem);
 }
 
@@ -468,6 +481,62 @@ void CPU::RM(Memory* mem)
     // return if S is set
     if (flags.S)
         RET(mem);
+}
+
+void CPU::JNZ(Memory* mem)
+{
+    // jump if Z is set
+    if (flags.Z)
+        JMP(mem);
+}
+
+void CPU::JNC(Memory* mem)
+{
+    // jump if C is set
+    if (flags.C)
+        JMP(mem);
+}
+
+void CPU::JPO(Memory* mem)
+{
+    // jump if P is not set
+    if (!flags.P)
+        JMP(mem);
+}
+
+void CPU::JP(Memory* mem)
+{
+    // call if S is not set
+    if (!flags.S)
+        CALL(mem);
+}
+
+void CPU::CNZ(Memory* mem)
+{
+    // call if Z is set
+    if (flags.Z)
+        CALL(mem);
+}
+
+void CPU::CNC(Memory* mem)
+{
+    // call if C is set
+    if (flags.C)
+        CALL(mem);
+}
+
+void CPU::CPO(Memory* mem)
+{
+    // call if P is not set
+    if (!flags.P)
+        CALL(mem);
+}
+
+void CPU::CP(Memory* mem)
+{
+    // call if S is not set
+    if (!flags.S)
+        CALL(mem);
 }
 
 void CPU::POP_PSW(Memory* mem)
