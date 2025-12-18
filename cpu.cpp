@@ -520,6 +520,18 @@ void CPU::RM(Memory* mem)
         RET(mem);
 }
 
+void CPU::PCHL(Memory* mem)
+{
+    // Load PC from HL
+    PC = HL;
+}
+
+void CPU::SPHL(Memory* mem)
+{
+    // Load PC from SP
+    PC = SP;
+}
+
 void CPU::JNZ(Memory* mem)
 {
     // jump if Z is set

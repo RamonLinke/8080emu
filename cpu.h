@@ -358,6 +358,7 @@ private:
     void RST4(Memory* mem) { RST(mem, 4); }
     void OUT(Memory* mem);
     void RPE(Memory* mem);
+    void PCHL(Memory* mem);
     void IN(Memory* mem);
     void RST5(Memory* mem) { RST(mem, 5); }
     
@@ -370,6 +371,7 @@ private:
     void ORI(Memory* mem);
     void RST6(Memory* mem) { RST(mem, 6); }
     void RM(Memory* mem);
+    void SPHL(Memory* mem);
     void RST7(Memory* mem) { RST(mem, 7); }
 
     struct CPUOpcode
@@ -408,9 +410,9 @@ private:
     //  0xD0          0xD1          0xD2          0xD3          0xD4          0xD5          0xD6          0xD7          0xD8          0xD9          0xDA          0xDB          0xDC          0xDD          0xDE          0xDF
         &CPU::RNC,    &CPU::POP_D,  &CPU::JNC,    &CPU::OUT,    &CPU::CNC,    &CPU::PUSH_D, &CPU::SUI,    &CPU::RST2,   &CPU::RC,     &CPU::TODO,   &CPU::TODO,   &CPU::IN,     &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::RST3,
     //  0xE0          0xE1          0xE2          0xE3          0xE4          0xE5          0xE6          0xE7          0xE8          0xE9          0xEA          0xEB          0xEC          0xED          0xEE          0xEF
-        &CPU::RPO,    &CPU::POP_H,  &CPU::JPO,    &CPU::TODO,   &CPU::CPO,    &CPU::PUSH_H, &CPU::ANI,    &CPU::RST4,   &CPU::RPE,    &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::RST5,
+        &CPU::RPO,    &CPU::POP_H,  &CPU::JPO,    &CPU::TODO,   &CPU::CPO,    &CPU::PUSH_H, &CPU::ANI,    &CPU::RST4,   &CPU::RPE,    &CPU::PCHL,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::RST5,
     //  0xF0          0xF1          0xF2          0xF3          0xF4          0xF5          0xF6          0xF7          0xF8          0xF9          0xFA          0xFB          0xFC          0xFD          0xFE          0xFF
-        &CPU::RP,     &CPU::POP_PSW,&CPU::JP,     &CPU::TODO,   &CPU::CP,     &CPU::PUSH_PSW,&CPU::ORI,   &CPU::RST6,   &CPU::RM,     &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::RST7,
+        &CPU::RP,     &CPU::POP_PSW,&CPU::JP,     &CPU::TODO,   &CPU::CP,     &CPU::PUSH_PSW,&CPU::ORI,   &CPU::RST6,   &CPU::RM,     &CPU::SPHL,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::RST7,
     };
 };
 
