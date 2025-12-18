@@ -74,7 +74,7 @@ void CPU::SetFlags(uint8 num)
     flags.S = num & 0b10000000; // signed flag
     flags.Z = num == 0;         // zero flag
 
-    // calculate parity
+    // calculate parity TODO: figure out if a popcnt instruction is possible?
     uint8 parityBits = 0;
     for (int i = 0; i < 8; i++)
         parityBits += ((num >> i) & 1);
@@ -259,6 +259,52 @@ void CPU::SBB_M(Memory* mem)
     flags.A = ((A & 0x0F) + (read & 0x0F)) > 0x0F;
 
     uint8 result8 = result16;
+    SetFlags(result8);
+    A = result8;
+}
+
+void CPU::ANA_R(uint8* reg)
+{
+    // AND A with register
+    uint8 result8 = A & *reg;
+    flags.C = 0;
+    flags.A = ((A & 0x0F) + (*reg & 0x0F)) > 0x0F;
+
+    SetFlags(result8);
+    A = result8;
+}
+
+void CPU::ANA_M(Memory* mem)
+{
+    // AND A with memory pointed by HL
+    uint8 read = mem->Read(HL);
+    uint8 result8 = A & read;
+    flags.C = 0;
+    flags.A = ((A & 0x0F) + (read & 0x0F)) > 0x0F;
+
+    SetFlags(result8);
+    A = result8;
+}
+
+void CPU::XRA_R(uint8* reg)
+{
+    // XOR A with register
+    uint8 result8 = A ^ *reg;
+    flags.C = 0;
+    flags.A = 0;
+
+    SetFlags(result8);
+    A = result8;
+}
+
+void CPU::XRA_M(Memory* mem)
+{
+    // XOR A with memory pointed by HL
+    uint8 read = mem->Read(HL);
+    uint8 result8 = A ^ read;
+    flags.C = 0;
+    flags.A = 0;
+
     SetFlags(result8);
     A = result8;
 }

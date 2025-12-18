@@ -90,6 +90,8 @@ private:
     void ADC_R(uint8* reg);
     void SUB_R(uint8* reg);
     void SBB_R(uint8* reg);
+    void ANA_R(uint8* reg);
+    void XRA_R(uint8* reg);
 
     // opcode functions
     void NOP(Memory* mem);
@@ -264,6 +266,24 @@ private:
     void SBB_M(Memory* mem);
     void SBB_A(Memory* mem) { SBB_R(&A); }
 
+    // 0xA0
+    void ANA_B(Memory* mem) { ANA_R(&B); }
+    void ANA_C(Memory* mem) { ANA_R(&C); }
+    void ANA_D(Memory* mem) { ANA_R(&D); }
+    void ANA_E(Memory* mem) { ANA_R(&E); }
+    void ANA_H(Memory* mem) { ANA_R(&H); }
+    void ANA_L(Memory* mem) { ANA_R(&L); }
+    void ANA_M(Memory* mem);
+    void ANA_A(Memory* mem) { ANA_R(&A); }
+    void XRA_B(Memory* mem) { XRA_R(&B); }
+    void XRA_C(Memory* mem) { XRA_R(&C); }
+    void XRA_D(Memory* mem) { XRA_R(&D); }
+    void XRA_E(Memory* mem) { XRA_R(&E); }
+    void XRA_H(Memory* mem) { XRA_R(&H); }
+    void XRA_L(Memory* mem) { XRA_R(&L); }
+    void XRA_M(Memory* mem);
+    void XRA_A(Memory* mem) { XRA_R(&A); }
+
     struct CPUOpcode
     {
         void (CPU::*handler)(Memory* data);
@@ -291,6 +311,8 @@ private:
         &CPU::ADD_B,  &CPU::ADD_C,  &CPU::ADD_D,  &CPU::ADD_E,  &CPU::ADD_H,  &CPU::ADD_L,  &CPU::ADD_M,  &CPU::ADD_A,  &CPU::ADC_B,  &CPU::ADC_C,  &CPU::ADC_D,  &CPU::ADC_E,  &CPU::ADC_H,  &CPU::ADC_L,  &CPU::ADC_M,  &CPU::ADC_A,
     //  0x90          0x91          0x92          0x93          0x94          0x95          0x96          0x97          0x98          0x99          0x9A          0x9B          0x9C          0x9D          0x9E          0x9F
         &CPU::SUB_B,  &CPU::SUB_C,  &CPU::SUB_D,  &CPU::SUB_E,  &CPU::SUB_H,  &CPU::SUB_L,  &CPU::SUB_M,  &CPU::SUB_A,  &CPU::SBB_B,  &CPU::SBB_C,  &CPU::SBB_D,  &CPU::SBB_E,  &CPU::SBB_H,  &CPU::SBB_L,  &CPU::SBB_M,  &CPU::SBB_A,
+    //  0xA0          0xA1          0xA2          0xA3          0xA4          0xA5          0xA6          0xA7          0xA8          0xA9          0xAA          0xAB          0xAC          0xAD          0xAE          0xAF
+        &CPU::ANA_B,  &CPU::ANA_C,  &CPU::ANA_D,  &CPU::ANA_E,  &CPU::ANA_H,  &CPU::ANA_L,  &CPU::ANA_M,  &CPU::ANA_A,  &CPU::XRA_B,  &CPU::XRA_C,  &CPU::XRA_D,  &CPU::XRA_E,  &CPU::XRA_H,  &CPU::XRA_L,  &CPU::XRA_M,  &CPU::XRA_A,
     };
 };
 
