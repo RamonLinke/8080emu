@@ -82,6 +82,11 @@ void CPU::SetFlags(uint8 num)
     flags.P = (parityBits & 1) == 0;
 }
 
+void CPU::TODO(Memory* mem)
+{
+    // opcode NYI
+}
+
 // multi register cpu functions
 void CPU::NOP(Memory* mem)
 {
