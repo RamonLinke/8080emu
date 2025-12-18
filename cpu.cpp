@@ -452,9 +452,10 @@ void CPU::RET(Memory* mem)
 
 void CPU::CALL(Memory* mem)
 {
-    // push current PC on the stack and jump
+    // push current PC on the stack and jump to imm16
+    uint16 address = ReadPCWord(mem);
     PushSPWord(mem, &PC);
-    PC = PopSPWord(mem);
+    PC = address;
 }
 
 void CPU::JMP(Memory* mem)
