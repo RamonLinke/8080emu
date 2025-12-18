@@ -69,6 +69,7 @@ public:
 private:
 
     Flags flags;
+    bool interrupts;
     bool halted;
 
     // external functions for writing and reading from the ports
@@ -376,6 +377,7 @@ private:
     void RP(Memory* mem);
     void POP_PSW(Memory* mem);
     void JP(Memory* mem);
+    void DI(Memory* mem);
     void CP(Memory* mem);
     void PUSH_PSW(Memory* mem);
     void ORI(Memory* mem);
@@ -383,6 +385,7 @@ private:
     void RM(Memory* mem);
     void SPHL(Memory* mem);
     void JM(Memory* mem);
+    void EI(Memory* mem);
     void CM(Memory* mem);
     void CPI(Memory* mem);
     void RST7(Memory* mem) { RST(mem, 7); }
@@ -425,7 +428,7 @@ private:
     //  0xE0          0xE1          0xE2          0xE3          0xE4          0xE5          0xE6          0xE7          0xE8          0xE9          0xEA          0xEB          0xEC          0xED          0xEE          0xEF
         &CPU::RPO,    &CPU::POP_H,  &CPU::JPO,    &CPU::TODO,   &CPU::CPO,    &CPU::PUSH_H, &CPU::ANI,    &CPU::RST4,   &CPU::RPE,    &CPU::PCHL,   &CPU::JPE,    &CPU::XCHG,   &CPU::CPE,    &CPU::TODO,   &CPU::XRI,    &CPU::RST5,
     //  0xF0          0xF1          0xF2          0xF3          0xF4          0xF5          0xF6          0xF7          0xF8          0xF9          0xFA          0xFB          0xFC          0xFD          0xFE          0xFF
-        &CPU::RP,     &CPU::POP_PSW,&CPU::JP,     &CPU::TODO,   &CPU::CP,     &CPU::PUSH_PSW,&CPU::ORI,   &CPU::RST6,   &CPU::RM,     &CPU::SPHL,   &CPU::JM,     &CPU::TODO,   &CPU::CM,     &CPU::TODO,   &CPU::CPI,    &CPU::RST7,
+        &CPU::RP,     &CPU::POP_PSW,&CPU::JP,     &CPU::DI,     &CPU::CP,     &CPU::PUSH_PSW,&CPU::ORI,   &CPU::RST6,   &CPU::RM,     &CPU::SPHL,   &CPU::JM,     &CPU::EI,     &CPU::CM,     &CPU::TODO,   &CPU::CPI,    &CPU::RST7,
     };
 };
 

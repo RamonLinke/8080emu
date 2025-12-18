@@ -27,6 +27,9 @@ CPU::CPU()
     port_out = std::bind(NullPortOut, std::placeholders::_1, std::placeholders::_2);
     port_in = std::bind(NullPortIn, std::placeholders::_1);
 
+    // disable interrupts until explicitly enabled
+    interrupts = false;
+
     // set running state
     halted = false;
 }
@@ -833,6 +836,18 @@ void CPU::IN(Memory* mem)
     // Input imm port to A
     uint8 port = ReadPCByte(mem);
     A = port_in(port);
+}
+
+void CPU::DI(Memory* mem)
+{
+    // disable interrupts
+    interrupts = false;
+}
+
+void CPU::EI(Memory* mem)
+{
+    // enable interrupts
+    interrupts = true;
 }
 
 void CPU::HLT(Memory* mem)
