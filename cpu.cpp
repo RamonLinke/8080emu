@@ -590,6 +590,13 @@ void CPU::JC(Memory* mem)
         JMP(mem);
 }
 
+void CPU::JPE(Memory* mem)
+{
+    // jump if P is set
+    if (flags.P)
+        JMP(mem);
+}
+
 void CPU::JM(Memory* mem)
 {
     // jump if S is set
@@ -597,11 +604,32 @@ void CPU::JM(Memory* mem)
         JMP(mem);
 }
 
-void CPU::JPE(Memory* mem)
+void CPU::CZ(Memory* mem)
 {
-    // jump if P is set
+    // call if Z is set
+    if (flags.Z)
+        CALL(mem);
+}
+
+void CPU::CC(Memory* mem)
+{
+    // call if C is set
+    if (flags.C)
+        CALL(mem);
+}
+
+void CPU::CPE(Memory* mem)
+{
+    // call if P is set
     if (flags.P)
-        JMP(mem);
+        CALL(mem);
+}
+
+void CPU::CM(Memory* mem)
+{
+    // call if S is set
+    if (flags.S)
+        CALL(mem);
 }
 
 void CPU::XCHG(Memory* mem)
@@ -623,7 +651,6 @@ void CPU::SPHL(Memory* mem)
     // Load PC from SP
     PC = SP;
 }
-
 
 void CPU::POP_PSW(Memory* mem)
 {
