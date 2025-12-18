@@ -348,6 +348,7 @@ private:
     void RST2(Memory* mem) { RST(mem, 2); }
     void RC(Memory* mem);
     void JC(Memory* mem);
+    void IN(Memory* mem);
     void RST3(Memory* mem) { RST(mem, 3); }
     
     // 0xE0
@@ -361,7 +362,6 @@ private:
     void OUT(Memory* mem);
     void RPE(Memory* mem);
     void PCHL(Memory* mem);
-    void IN(Memory* mem);
     void JPE(Memory* mem);
     void RST5(Memory* mem) { RST(mem, 5); }
     

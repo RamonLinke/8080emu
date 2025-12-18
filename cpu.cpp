@@ -590,6 +590,13 @@ void CPU::JC(Memory* mem)
         JMP(mem);
 }
 
+void CPU::JM(Memory* mem)
+{
+    // jump if S is set
+    if (flags.S)
+        JMP(mem);
+}
+
 void CPU::JPE(Memory* mem)
 {
     // jump if P is set
@@ -597,11 +604,12 @@ void CPU::JPE(Memory* mem)
         JMP(mem);
 }
 
-void CPU::JM(Memory* mem)
+void CPU::XCHG(Memory* mem)
 {
-    // jump if S is set
-    if (flags.S)
-        JMP(mem);
+    // Exchange DE and HL
+    uint16 temp = HL;
+    HL = DE;
+    DE = temp;
 }
 
 void CPU::PCHL(Memory* mem)
