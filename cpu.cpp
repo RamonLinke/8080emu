@@ -23,6 +23,10 @@ CPU::CPU()
     flags.P = 0x0;  // parity
     flags.C = 0x0;  // carry
 
+    // ports, set null functions untill overwritten externally
+    port_out = std::bind(NullPortOut, std::placeholders::_1, std::placeholders::_2);
+    port_in = std::bind(NullPortIn, std::placeholders::_1);
+
     // set running state
     halted = false;
 }
@@ -33,6 +37,27 @@ void CPU::Reset()
     PC = 0x0;
     halted = false;
 };
+
+void CPU::SetPortOutHandler(std::function<void(uint8, uint8)> func)
+{
+    port_out = std::bind(func, std::placeholders::_1, std::placeholders::_2);
+}
+
+void CPU::SetPortInHandler(std::function<uint8(uint8)> func)
+{
+    port_in = std::bind(func, std::placeholders::_1);
+}
+
+void CPU::NullPortOut(uint8 port, uint8 data)
+{
+    // nothing attached, do nothing
+}
+
+uint8 CPU::NullPortIn(uint8 port)
+{
+    // nothing attached to this port, return 0
+    return 0x00;
+}
 
 void CPU::Tick(Memory* mem)
 {
@@ -577,6 +602,20 @@ void CPU::CMC(Memory* mem)
 {
     // Complement Carry flag
     flags.C = !flags.C;
+}
+
+void CPU::OUT(Memory* mem)
+{
+    // Output A to imm port
+    uint8 port = ReadPCByte(mem);
+    port_out(port, A);
+}
+
+void CPU::IN(Memory* mem)
+{
+    // Input imm port to A
+    uint8 port = ReadPCByte(mem);
+    A = port_in(port);
 }
 
 void CPU::HLT(Memory* mem)

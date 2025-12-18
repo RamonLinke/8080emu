@@ -2,6 +2,7 @@
 #define _CPU_H
 
 #include <math.h>
+#include <functional>
 
 #include "memory.h"
 #include "defines.h"
@@ -62,11 +63,21 @@ public:
 
     void Halt();
     void Reset();
+    void SetPortOutHandler(std::function<void(uint8 port, uint8 data)> func);
+    void SetPortInHandler(std::function<uint8(uint8 port)> func);
 
 private:
 
     Flags flags;
     bool halted;
+
+    // external functions for writing and reading from the ports
+    std::function<void(uint8, uint8)> port_out;
+    std::function<uint8(uint8)> port_in;
+
+    // null port functions
+    static void NullPortOut(uint8, uint8);
+    static uint8 NullPortIn(uint8);
 
     uint8 ReadPCByte(Memory* mem);
     uint16 ReadPCWord(Memory* mem);
@@ -328,7 +339,9 @@ private:
     void RPO(Memory* mem);
     void POP_H(Memory* mem) { POP_R(mem, &HL); }
     void PUSH_H(Memory* mem) { PUSH_R(mem, &HL); }
+    void OUT(Memory* mem);
     void RPE(Memory* mem);
+    void IN(Memory* mem);
     
     // 0xF0
     void RP(Memory* mem);
@@ -371,7 +384,7 @@ private:
     //  0xC0          0xC1          0xC2          0xC3          0xC4          0xC5          0xC6          0xC7          0xC8          0xC9          0xCA          0xCB          0xCC          0xCD          0xCE          0xCF
         &CPU::RNZ,    &CPU::POP_B,  &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::PUSH_B, &CPU::TODO,   &CPU::TODO,   &CPU::RZ,     &CPU::RET,    &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::NOP,
     //  0xD0          0xD1          0xD2          0xD3          0xD4          0xD5          0xD6          0xD7          0xD8          0xD9          0xDA          0xDB          0xDC          0xDD          0xDE          0xDF
-        &CPU::RNC,    &CPU::POP_D,  &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::PUSH_D, &CPU::TODO,   &CPU::TODO,   &CPU::RC,     &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::NOP,
+        &CPU::RNC,    &CPU::POP_D,  &CPU::TODO,   &CPU::OUT,    &CPU::TODO,   &CPU::PUSH_D, &CPU::TODO,   &CPU::TODO,   &CPU::RC,     &CPU::TODO,   &CPU::TODO,   &CPU::IN,     &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::NOP,
     //  0xE0          0xE1          0xE2          0xE3          0xE4          0xE5          0xE6          0xE7          0xE8          0xE9          0xEA          0xEB          0xEC          0xED          0xEE          0xEF
         &CPU::RPO,    &CPU::POP_H,  &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::PUSH_H, &CPU::TODO,   &CPU::TODO,   &CPU::RPE,    &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::NOP,
     //  0xF0          0xF1          0xF2          0xF3          0xF4          0xF5          0xF6          0xF7          0xF8          0xF9          0xFA          0xFB          0xFC          0xFD          0xFE          0xFF
