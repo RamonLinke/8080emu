@@ -309,6 +309,48 @@ void CPU::XRA_M(Memory* mem)
     A = result8;
 }
 
+void CPU::ORA_R(uint8* reg)
+{
+    // OR A with register
+    uint8 result8 = A | *reg;
+    flags.C = 0;
+    flags.A = 0;
+
+    SetFlags(result8);
+    A = result8;
+}
+
+void CPU::ORA_M(Memory* mem)
+{
+    // OR A with memory pointed by HL
+    uint8 read = mem->Read(HL);
+    uint8 result8 = A | read;
+    flags.C = 0;
+    flags.A = 0;
+
+    SetFlags(result8);
+    A = result8;
+}
+
+void CPU::CMP_R(uint8* reg)
+{
+    // compare A with register
+    int16 result16 = A - *reg;
+    flags.C = result16 >> 8;
+    flags.A = ~(A ^ result16 ^ *reg) & 0x10;
+    SetFlags(result16 & 0xFF);
+}
+
+void CPU::CMP_M(Memory* mem)
+{
+    // compare A with pointed by HL
+    uint8 read = mem->Read(HL);
+    int16 result16 = A - read;
+    flags.C = result16 >> 8;
+    flags.A = ~(A ^ result16 ^ read) & 0x10;
+    SetFlags(result16 & 0xFF);
+}
+
 // unique opcodes
 void CPU::RLC(Memory* mem)
 {

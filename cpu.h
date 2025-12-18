@@ -92,6 +92,8 @@ private:
     void SBB_R(uint8* reg);
     void ANA_R(uint8* reg);
     void XRA_R(uint8* reg);
+    void ORA_R(uint8* reg);
+    void CMP_R(uint8* reg);
 
     // opcode functions
     void NOP(Memory* mem);
@@ -284,6 +286,24 @@ private:
     void XRA_M(Memory* mem);
     void XRA_A(Memory* mem) { XRA_R(&A); }
 
+    // 0xB0
+    void ORA_B(Memory* mem) { ORA_R(&B); }
+    void ORA_C(Memory* mem) { ORA_R(&C); }
+    void ORA_D(Memory* mem) { ORA_R(&D); }
+    void ORA_E(Memory* mem) { ORA_R(&E); }
+    void ORA_H(Memory* mem) { ORA_R(&H); }
+    void ORA_L(Memory* mem) { ORA_R(&L); }
+    void ORA_M(Memory* mem);
+    void ORA_A(Memory* mem) { ORA_R(&A); }
+    void CMP_B(Memory* mem) { CMP_R(&B); }
+    void CMP_C(Memory* mem) { CMP_R(&C); }
+    void CMP_D(Memory* mem) { CMP_R(&D); }
+    void CMP_E(Memory* mem) { CMP_R(&E); }
+    void CMP_H(Memory* mem) { CMP_R(&H); }
+    void CMP_L(Memory* mem) { CMP_R(&L); }
+    void CMP_M(Memory* mem);
+    void CMP_A(Memory* mem) { CMP_R(&A); }
+
     struct CPUOpcode
     {
         void (CPU::*handler)(Memory* data);
@@ -313,6 +333,8 @@ private:
         &CPU::SUB_B,  &CPU::SUB_C,  &CPU::SUB_D,  &CPU::SUB_E,  &CPU::SUB_H,  &CPU::SUB_L,  &CPU::SUB_M,  &CPU::SUB_A,  &CPU::SBB_B,  &CPU::SBB_C,  &CPU::SBB_D,  &CPU::SBB_E,  &CPU::SBB_H,  &CPU::SBB_L,  &CPU::SBB_M,  &CPU::SBB_A,
     //  0xA0          0xA1          0xA2          0xA3          0xA4          0xA5          0xA6          0xA7          0xA8          0xA9          0xAA          0xAB          0xAC          0xAD          0xAE          0xAF
         &CPU::ANA_B,  &CPU::ANA_C,  &CPU::ANA_D,  &CPU::ANA_E,  &CPU::ANA_H,  &CPU::ANA_L,  &CPU::ANA_M,  &CPU::ANA_A,  &CPU::XRA_B,  &CPU::XRA_C,  &CPU::XRA_D,  &CPU::XRA_E,  &CPU::XRA_H,  &CPU::XRA_L,  &CPU::XRA_M,  &CPU::XRA_A,
+    //  0xB0          0xB1          0xB2          0xB3          0xB4          0xB5          0xB6          0xB7          0xB8          0xB9          0xBA          0xBB          0xBC          0xBD          0xBE          0xBF
+        &CPU::ORA_B,  &CPU::ORA_C,  &CPU::ORA_D,  &CPU::ORA_E,  &CPU::ORA_H,  &CPU::ORA_L,  &CPU::ORA_M,  &CPU::ORA_A,  &CPU::CMP_B,  &CPU::CMP_C,  &CPU::CMP_D,  &CPU::CMP_E,  &CPU::CMP_H,  &CPU::CMP_L,  &CPU::CMP_M,  &CPU::CMP_A,
     };
 };
 
