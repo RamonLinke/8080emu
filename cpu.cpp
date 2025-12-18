@@ -167,7 +167,7 @@ void CPU::MOV_RM(Memory* mem, uint8* reg)
     mem->Write(HL, *reg);
 }
 
-void CPU::MOV_MR(uint8* reg, Memory* mem)
+void CPU::MOV_MR(Memory* mem, uint8* reg)
 {
     // move from mem pointed by HL into register
     *reg = mem->Read(HL);

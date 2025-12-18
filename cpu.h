@@ -88,7 +88,7 @@ private:
     void DCX(uint16* reg);
     void MOV_RR(uint8* fromReg, uint8* toReg);
     void MOV_RM(Memory* mem, uint8* reg);
-    void MOV_MR(uint8* reg, Memory* mem);
+    void MOV_MR(Memory* mem, uint8* reg);
     void ADD_R(uint8* reg);
     void ADC_R(uint8* reg);
     void SUB_R(uint8* reg);
@@ -170,7 +170,7 @@ private:
     void MOV_BE(Memory* mem) { MOV_RR(&B, &E); }
     void MOV_BH(Memory* mem) { MOV_RR(&B, &H); }
     void MOV_BL(Memory* mem) { MOV_RR(&B, &L); }
-    void MOV_BM(Memory* mem) { MOV_MR(&B, mem); }
+    void MOV_BM(Memory* mem) { MOV_MR(mem, &B); }
     void MOV_BA(Memory* mem) { MOV_RR(&B, &A); }
     void MOV_CB(Memory* mem) { MOV_RR(&C, &B); }
     void MOV_CC(Memory* mem) { MOV_RR(&C, &C); }
@@ -178,7 +178,7 @@ private:
     void MOV_CE(Memory* mem) { MOV_RR(&C, &E); }
     void MOV_CH(Memory* mem) { MOV_RR(&C, &H); }
     void MOV_CL(Memory* mem) { MOV_RR(&C, &L); }
-    void MOV_CM(Memory* mem) { MOV_MR(&C, mem); }
+    void MOV_CM(Memory* mem) { MOV_MR(mem, &C); }
     void MOV_CA(Memory* mem) { MOV_RR(&C, &A); }
 
     // 0x50
@@ -188,7 +188,7 @@ private:
     void MOV_DE(Memory* mem) { MOV_RR(&D, &E); }
     void MOV_DH(Memory* mem) { MOV_RR(&D, &H); }
     void MOV_DL(Memory* mem) { MOV_RR(&D, &L); }
-    void MOV_DM(Memory* mem) { MOV_MR(&D, mem); }
+    void MOV_DM(Memory* mem) { MOV_MR(mem, &D); }
     void MOV_DA(Memory* mem) { MOV_RR(&D, &A); }
     void MOV_EB(Memory* mem) { MOV_RR(&E, &B); }
     void MOV_EC(Memory* mem) { MOV_RR(&E, &C); }
@@ -196,7 +196,7 @@ private:
     void MOV_EE(Memory* mem) { MOV_RR(&E, &E); }
     void MOV_EH(Memory* mem) { MOV_RR(&E, &H); }
     void MOV_EL(Memory* mem) { MOV_RR(&E, &L); }
-    void MOV_EM(Memory* mem) { MOV_MR(&E, mem); }
+    void MOV_EM(Memory* mem) { MOV_MR(mem, &E); }
     void MOV_EA(Memory* mem) { MOV_RR(&E, &A); }
 
     // 0x60
@@ -206,7 +206,7 @@ private:
     void MOV_HE(Memory* mem) { MOV_RR(&H, &E); }
     void MOV_HH(Memory* mem) { MOV_RR(&H, &H); }
     void MOV_HL(Memory* mem) { MOV_RR(&H, &L); }
-    void MOV_HM(Memory* mem) { MOV_MR(&H, mem); }
+    void MOV_HM(Memory* mem) { MOV_MR(mem, &H); }
     void MOV_HA(Memory* mem) { MOV_RR(&H, &A); }
     void MOV_LB(Memory* mem) { MOV_RR(&L, &B); }
     void MOV_LC(Memory* mem) { MOV_RR(&L, &C); }
@@ -214,7 +214,7 @@ private:
     void MOV_LE(Memory* mem) { MOV_RR(&L, &E); }
     void MOV_LH(Memory* mem) { MOV_RR(&L, &H); }
     void MOV_LL(Memory* mem) { MOV_RR(&L, &L); }
-    void MOV_LM(Memory* mem) { MOV_MR(&L, mem); }
+    void MOV_LM(Memory* mem) { MOV_MR(mem, &L); }
     void MOV_LA(Memory* mem) { MOV_RR(&L, &A); }
 
     // 0x70
@@ -232,7 +232,7 @@ private:
     void MOV_AE(Memory* mem) { MOV_RR(&A, &E); }
     void MOV_AH(Memory* mem) { MOV_RR(&A, &H); }
     void MOV_AL(Memory* mem) { MOV_RR(&A, &L); }
-    void MOV_AM(Memory* mem) { MOV_MR(&A, mem); }
+    void MOV_AM(Memory* mem) { MOV_MR(mem, &A); }
     void MOV_AA(Memory* mem) { MOV_RR(&A, &A); }
 
     // 0x80
