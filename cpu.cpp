@@ -233,6 +233,13 @@ void CPU::ADD_M(Memory* mem)
     A = result8;
 }
 
+void CPU::ADI(Memory* mem)
+{
+    // adds imm to A
+    uint8 data = ReadPCByte(mem);
+    ADD_R(&data);
+}
+
 void CPU::ADC_R(uint8* reg)
 {
     // adds register to A with carry
@@ -283,6 +290,13 @@ void CPU::SUB_M(Memory* mem)
     A = result8;
 }
 
+void CPU::SUI(Memory* mem)
+{
+    // subtracts imm from A
+    uint8 data = ReadPCByte(mem);
+    SUB_R(&data);
+}
+
 void CPU::SBB_R(uint8* reg)
 {
     // subtracts register from A with carry
@@ -331,6 +345,13 @@ void CPU::ANA_M(Memory* mem)
     A = result8;
 }
 
+void CPU::ANI(Memory* mem)
+{
+    // ANDS imm with A
+    uint8 data = ReadPCByte(mem);
+    ANA_R(&data);
+}
+
 void CPU::XRA_R(uint8* reg)
 {
     // XOR A with register
@@ -375,6 +396,13 @@ void CPU::ORA_M(Memory* mem)
 
     SetFlags(result8);
     A = result8;
+}
+
+void CPU::ORI(Memory* mem)
+{
+    // OR A with imm
+    uint8 data = ReadPCByte(mem);
+    ORA_R(&data);
 }
 
 void CPU::CMP_R(uint8* reg)
