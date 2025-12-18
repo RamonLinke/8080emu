@@ -68,6 +68,11 @@ uint16 CPU::ReadPCWord(Memory* mem)
     return mem->Read(PC++) << 8 | mem->Read(PC++);
 }
 
+uint16 CPU::PopSPWord(Memory* mem)
+{
+    return mem->Read(SP++) << 8 | mem->Read(SP++);
+}
+
 void CPU::SetFlags(uint8 num)
 {
     // update cpu flags based on num
@@ -354,6 +359,68 @@ void CPU::CMP_M(Memory* mem)
     flags.C = result16 >> 8;
     flags.A = ~(A ^ result16 ^ read) & 0x10;
     SetFlags(result16 & 0xFF);
+}
+
+void CPU::RET(Memory* mem)
+{
+    // pop address on stack and jump
+    PC = PopSPWord(mem);
+}
+
+void CPU::RNZ(Memory* mem)
+{
+    // return if Z is not set
+    if (!flags.Z)
+        RET(mem);
+}
+
+void CPU::RZ(Memory* mem)
+{
+    // return if Z is set
+    if (flags.Z)
+        RET(mem);
+}
+
+void CPU::RNC(Memory* mem)
+{
+    // return if C is not set
+    if (!flags.C)
+        RET(mem);
+}
+
+void CPU::RC(Memory* mem)
+{
+    // return if C is set
+    if (flags.C)
+        RET(mem);
+}
+
+void CPU::RPO(Memory* mem)
+{
+    // return if P is not set
+    if (!flags.P)
+        RET(mem);
+}
+
+void CPU::RPE(Memory* mem)
+{
+    // return if P is set
+    if (flags.P)
+        RET(mem);
+}
+
+void CPU::RP(Memory* mem)
+{
+    // return if S is not set
+    if (!flags.S)
+        RET(mem);
+}
+
+void CPU::RM(Memory* mem)
+{
+    // return if S is set
+    if (flags.S)
+        RET(mem);
 }
 
 // unique opcodes
