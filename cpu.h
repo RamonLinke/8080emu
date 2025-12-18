@@ -72,6 +72,8 @@ private:
     uint16 ReadPCWord(Memory* mem);
     uint16 PopSPWord(Memory* mem);
 
+    void PushSPWord(Memory* mem, uint16* reg);
+
     void SetFlags(uint8 num);
 
     void TODO(Memory* mem);
@@ -97,6 +99,8 @@ private:
     void XRA_R(uint8* reg);
     void ORA_R(uint8* reg);
     void CMP_R(uint8* reg);
+    void POP_R(Memory* mem, uint16* reg);
+    void PUSH_R(Memory* mem, uint16* reg);
 
     // opcode functions
     void NOP(Memory* mem);
@@ -309,19 +313,27 @@ private:
 
     // 0xC0
     void RNZ(Memory* mem);
+    void POP_B(Memory* mem) { POP_R(mem, &BC); }
+    void PUSH_B(Memory* mem) { PUSH_R(mem, &BC); }
     void RZ(Memory* mem);
     void RET(Memory* mem);
 
     // 0xD0
     void RNC(Memory* mem);
+    void POP_D(Memory* mem) { POP_R(mem, &DE); }
+    void PUSH_D(Memory* mem) { PUSH_R(mem, &DE); }
     void RC(Memory* mem);
     
     // 0xE0
     void RPO(Memory* mem);
+    void POP_H(Memory* mem) { POP_R(mem, &HL); }
+    void PUSH_H(Memory* mem) { PUSH_R(mem, &HL); }
     void RPE(Memory* mem);
     
     // 0xF0
     void RP(Memory* mem);
+    void POP_PSW(Memory* mem);
+    void PUSH_PSW(Memory* mem);
     void RM(Memory* mem);
     
 
@@ -357,13 +369,13 @@ private:
     //  0xB0          0xB1          0xB2          0xB3          0xB4          0xB5          0xB6          0xB7          0xB8          0xB9          0xBA          0xBB          0xBC          0xBD          0xBE          0xBF
         &CPU::ORA_B,  &CPU::ORA_C,  &CPU::ORA_D,  &CPU::ORA_E,  &CPU::ORA_H,  &CPU::ORA_L,  &CPU::ORA_M,  &CPU::ORA_A,  &CPU::CMP_B,  &CPU::CMP_C,  &CPU::CMP_D,  &CPU::CMP_E,  &CPU::CMP_H,  &CPU::CMP_L,  &CPU::CMP_M,  &CPU::CMP_A,
     //  0xC0          0xC1          0xC2          0xC3          0xC4          0xC5          0xC6          0xC7          0xC8          0xC9          0xCA          0xCB          0xCC          0xCD          0xCE          0xCF
-        &CPU::RNZ,    &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::RZ,     &CPU::RET,    &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::NOP,
+        &CPU::RNZ,    &CPU::POP_B,  &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::PUSH_B, &CPU::TODO,   &CPU::TODO,   &CPU::RZ,     &CPU::RET,    &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::NOP,
     //  0xD0          0xD1          0xD2          0xD3          0xD4          0xD5          0xD6          0xD7          0xD8          0xD9          0xDA          0xDB          0xDC          0xDD          0xDE          0xDF
-        &CPU::RNC,    &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::RC,     &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::NOP,
+        &CPU::RNC,    &CPU::POP_D,  &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::PUSH_D, &CPU::TODO,   &CPU::TODO,   &CPU::RC,     &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::NOP,
     //  0xE0          0xE1          0xE2          0xE3          0xE4          0xE5          0xE6          0xE7          0xE8          0xE9          0xEA          0xEB          0xEC          0xED          0xEE          0xEF
-        &CPU::RPO,    &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::RPE,    &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::NOP,
+        &CPU::RPO,    &CPU::POP_H,  &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::PUSH_H, &CPU::TODO,   &CPU::TODO,   &CPU::RPE,    &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::NOP,
     //  0xF0          0xF1          0xF2          0xF3          0xF4          0xF5          0xF6          0xF7          0xF8          0xF9          0xFA          0xFB          0xFC          0xFD          0xFE          0xFF
-        &CPU::RP,     &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::RM,     &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::NOP,
+        &CPU::RP,     &CPU::POP_PSW,&CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::PUSH_PSW,&CPU::TODO,  &CPU::TODO,   &CPU::RM,     &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::TODO,   &CPU::NOP,
     };
 };
 

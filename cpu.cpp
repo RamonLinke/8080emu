@@ -73,6 +73,12 @@ uint16 CPU::PopSPWord(Memory* mem)
     return mem->Read(SP++) << 8 | mem->Read(SP++);
 }
 
+void CPU::PushSPWord(Memory* mem, uint16* reg)
+{
+    mem->Write(SP--, *reg & 0xFF);
+    mem->Write(SP--, *reg >> 8);
+}
+
 void CPU::SetFlags(uint8 num)
 {
     // update cpu flags based on num
@@ -361,6 +367,16 @@ void CPU::CMP_M(Memory* mem)
     SetFlags(result16 & 0xFF);
 }
 
+void CPU::POP_R(Memory* mem, uint16* reg)
+{
+    *reg = PopSPWord(mem);
+}
+
+void CPU::PUSH_R(Memory* mem, uint16* reg)
+{
+    PushSPWord(mem, reg);
+}
+
 void CPU::RET(Memory* mem)
 {
     // pop address on stack and jump
@@ -421,6 +437,37 @@ void CPU::RM(Memory* mem)
     // return if S is set
     if (flags.S)
         RET(mem);
+}
+
+void CPU::POP_PSW(Memory* mem)
+{
+    // pops A and flags from stack
+    uint16 pop = PopSPWord(mem);
+    A = pop >> 8;
+
+    // reconstruct flags
+    uint8 psw = pop & 0xFF;
+    flags.C = (psw >> 0) & 1;
+    flags.P = (psw >> 2) & 1;
+    flags.A = (psw >> 4) & 1;
+    flags.Z = (psw >> 6) & 1;
+    flags.S = (psw >> 7) & 1;
+}
+
+void CPU::PUSH_PSW(Memory* mem)
+{
+    uint8 psw = 0;
+    psw |= flags.C << 0;
+    psw |= 1 << 1; // bit 1 is always set
+    psw |= flags.P << 2;
+    psw |= flags.A << 4;
+    psw |= flags.Z << 6;
+    psw |= flags.S << 7;
+
+    // combine accumulator and constructed flags
+    uint16 push = (A << 8 | psw);
+    // push onto stack
+    PushSPWord(mem, &push);
 }
 
 // unique opcodes
