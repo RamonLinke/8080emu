@@ -85,21 +85,25 @@ void CPU::Halt()
 
 uint8 CPU::ReadPCByte(Memory* mem)
 {
+    // read a byte at the PC and increment it
     return mem->Read(PC++);
 }
 
 uint16 CPU::ReadPCWord(Memory* mem)
 {
+    // read a word at the PC and increment it
     return mem->Read(PC++) << 8 | mem->Read(PC++);
 }
 
 uint16 CPU::PopSPWord(Memory* mem)
 {
+    // read a word from the stack and increment it
     return mem->Read(SP++) << 8 | mem->Read(SP++);
 }
 
 void CPU::PushSPWord(Memory* mem, uint16* reg)
 {
+    // write a word to the stack and decrement it
     mem->Write(SP--, *reg & 0xFF);
     mem->Write(SP--, *reg >> 8);
 }
@@ -394,11 +398,13 @@ void CPU::CMP_M(Memory* mem)
 
 void CPU::POP_R(Memory* mem, uint16* reg)
 {
+    // pop word from stack into registers
     *reg = PopSPWord(mem);
 }
 
 void CPU::PUSH_R(Memory* mem, uint16* reg)
 {
+    // push registers
     PushSPWord(mem, reg);
 }
 
@@ -481,6 +487,7 @@ void CPU::POP_PSW(Memory* mem)
 
 void CPU::PUSH_PSW(Memory* mem)
 {
+    // push accumulator and flags to stack
     uint8 psw = 0;
     psw |= flags.C << 0;
     psw |= 1 << 1; // bit 1 is always set
@@ -620,6 +627,7 @@ void CPU::IN(Memory* mem)
 
 void CPU::HLT(Memory* mem)
 {
+    // halt the CPU
     halted = true;
     printf("CPU Halted at 0x%04X", PC);
 }
