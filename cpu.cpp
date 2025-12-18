@@ -471,24 +471,10 @@ void CPU::RNZ(Memory* mem)
         RET(mem);
 }
 
-void CPU::RZ(Memory* mem)
-{
-    // return if Z is set
-    if (flags.Z)
-        RET(mem);
-}
-
 void CPU::RNC(Memory* mem)
 {
     // return if C is not set
     if (!flags.C)
-        RET(mem);
-}
-
-void CPU::RC(Memory* mem)
-{
-    // return if C is set
-    if (flags.C)
         RET(mem);
 }
 
@@ -499,13 +485,6 @@ void CPU::RPO(Memory* mem)
         RET(mem);
 }
 
-void CPU::RPE(Memory* mem)
-{
-    // return if P is set
-    if (flags.P)
-        RET(mem);
-}
-
 void CPU::RP(Memory* mem)
 {
     // return if S is not set
@@ -513,36 +492,17 @@ void CPU::RP(Memory* mem)
         RET(mem);
 }
 
-void CPU::RM(Memory* mem)
-{
-    // return if S is set
-    if (flags.S)
-        RET(mem);
-}
-
-void CPU::PCHL(Memory* mem)
-{
-    // Load PC from HL
-    PC = HL;
-}
-
-void CPU::SPHL(Memory* mem)
-{
-    // Load PC from SP
-    PC = SP;
-}
-
 void CPU::JNZ(Memory* mem)
 {
-    // jump if Z is set
-    if (flags.Z)
+    // jump if Z is not set
+    if (!flags.Z)
         JMP(mem);
 }
 
 void CPU::JNC(Memory* mem)
 {
-    // jump if C is set
-    if (flags.C)
+    // jump if C is not set
+    if (!flags.C)
         JMP(mem);
 }
 
@@ -562,15 +522,15 @@ void CPU::JP(Memory* mem)
 
 void CPU::CNZ(Memory* mem)
 {
-    // call if Z is set
-    if (flags.Z)
+    // call if Z is not set
+    if (!flags.Z)
         CALL(mem);
 }
 
 void CPU::CNC(Memory* mem)
 {
-    // call if C is set
-    if (flags.C)
+    // call if C is not set
+    if (!flags.C)
         CALL(mem);
 }
 
@@ -587,6 +547,75 @@ void CPU::CP(Memory* mem)
     if (!flags.S)
         CALL(mem);
 }
+
+void CPU::RZ(Memory* mem)
+{
+    // return if Z is set
+    if (flags.Z)
+        RET(mem);
+}
+
+void CPU::RC(Memory* mem)
+{
+    // return if C is set
+    if (flags.C)
+        RET(mem);
+}
+
+void CPU::RPE(Memory* mem)
+{
+    // return if P is set
+    if (flags.P)
+        RET(mem);
+}
+
+void CPU::RM(Memory* mem)
+{
+    // return if S is set
+    if (flags.S)
+        RET(mem);
+}
+
+void CPU::JZ(Memory* mem)
+{
+    // jump if Z is set
+    if (flags.Z)
+        JMP(mem);
+}
+
+void CPU::JC(Memory* mem)
+{
+    // jump if C is set
+    if (flags.C)
+        JMP(mem);
+}
+
+void CPU::JPE(Memory* mem)
+{
+    // jump if P is set
+    if (flags.P)
+        JMP(mem);
+}
+
+void CPU::JM(Memory* mem)
+{
+    // jump if S is set
+    if (flags.S)
+        JMP(mem);
+}
+
+void CPU::PCHL(Memory* mem)
+{
+    // Load PC from HL
+    PC = HL;
+}
+
+void CPU::SPHL(Memory* mem)
+{
+    // Load PC from SP
+    PC = SP;
+}
+
 
 void CPU::POP_PSW(Memory* mem)
 {
