@@ -215,7 +215,7 @@ void CPU::ADD_R(uint8* reg)
     flags.C = result16 & 0xFF00;
     flags.A = ((A & 0x0F) + (*reg & 0x0F)) > 0x0F;
 
-    uint8 result8 = result16;
+    uint8 result8 = result16 & 0xFF;
     SetFlags(result8);
     A = result8;
 }
@@ -228,7 +228,7 @@ void CPU::ADD_M(Memory* mem)
     flags.C = result16 & 0xFF00;
     flags.A = ((A & 0x0F) + (read & 0x0F)) > 0x0F;
 
-    uint8 result8 = result16;
+    uint8 result8 = result16 & 0xFF;
     SetFlags(result8);
     A = result8;
 }
@@ -247,7 +247,7 @@ void CPU::ADC_R(uint8* reg)
     flags.C = result16 & 0xFF00;
     flags.A = ((A & 0x0F) + (*reg & 0x0F)) > 0x0F;
 
-    uint8 result8 = result16;
+    uint8 result8 = result16 & 0xFF;
     SetFlags(result8);
     A = result8;
 }
@@ -260,7 +260,7 @@ void CPU::ADC_M(Memory* mem)
     flags.C = result16 & 0xFF00;
     flags.A = ((A & 0x0F) + (read & 0x0F)) > 0x0F;
 
-    uint8 result8 = result16;
+    uint8 result8 = result16 & 0xFF;
     SetFlags(result8);
     A = result8;
 }
@@ -272,7 +272,7 @@ void CPU::SUB_R(uint8* reg)
     flags.C = !(result16 & 0xFF00);
     flags.A = ((A & 0x0F) + (*reg & 0x0F)) > 0x0F;
 
-    uint8 result8 = result16;
+    uint8 result8 = result16 & 0xFF;
     SetFlags(result8);
     A = result8;
 }
@@ -285,7 +285,7 @@ void CPU::SUB_M(Memory* mem)
     flags.C = result16 & 0xFF00;
     flags.A = ((A & 0x0F) + (read & 0x0F)) > 0x0F;
 
-    uint8 result8 = result16;
+    uint8 result8 = result16 & 0xFF;
     SetFlags(result8);
     A = result8;
 }
@@ -304,7 +304,7 @@ void CPU::SBB_R(uint8* reg)
     flags.C = !(result16 & 0xFF00);
     flags.A = ((A & 0x0F) + (*reg & 0x0F)) > 0x0F;
 
-    uint8 result8 = result16;
+    uint8 result8 = result16 & 0xFF;
     SetFlags(result8);
     A = result8;
 }
@@ -317,7 +317,7 @@ void CPU::SBB_M(Memory* mem)
     flags.C = !(result16 & 0xFF00);
     flags.A = ((A & 0x0F) + (read & 0x0F)) > 0x0F;
 
-    uint8 result8 = result16;
+    uint8 result8 = result16 & 0xFF;
     SetFlags(result8);
     A = result8;
 }
@@ -617,7 +617,7 @@ void CPU::RAL(Memory* mem)
     // Rotate A Left through carry flag
     bool carry = flags.C;
     flags.C = (A >> 7);
-    A = (A << 1) | carry;
+    A = (A << 1) | (uint8)carry;
 }
 
 void CPU::RAR(Memory* mem)
