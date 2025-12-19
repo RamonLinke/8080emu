@@ -170,14 +170,14 @@ private:
     void INX_SP(Memory* mem) { INX(&SP); };
     void INR_M(Memory* mem);
     void DCR_M(Memory* mem);
-    void MVI_M(Memory* mem) { MVI(mem, &H); };
+    void MVI_M(Memory* mem);
     void STC(Memory* mem);
-    void DAD_SP(Memory* mem) { DAD(&HL); };
+    void DAD_SP(Memory* mem) { DAD(&SP); };
     void LDA(Memory* mem);
-    void DCX_SP(Memory* mem) { DCX(&HL); };
-    void INR_A(Memory* mem) { INR(&L); };
-    void DCR_A(Memory* mem) { DCR(&L); };
-    void MVI_A(Memory* mem) { MVI(mem, &L); };
+    void DCX_SP(Memory* mem) { DCX(&SP); };
+    void INR_A(Memory* mem) { INR(&A); };
+    void DCR_A(Memory* mem) { DCR(&A); };
+    void MVI_A(Memory* mem) { MVI(mem, &A); };
     void CMC(Memory* mem);
 
     // 0x40

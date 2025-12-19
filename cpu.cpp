@@ -452,7 +452,7 @@ void CPU::CPI(Memory* mem)
 {
     // compare imm with A
     uint8 data = ReadPCByte(mem);
-    XRA_R(&data);
+    CMP_R(&data);
 }
 
 void CPU::POP_R(Memory* mem, uint16* reg)
@@ -804,6 +804,13 @@ void CPU::DCR_M(Memory* mem)
     flags.A = valPtr & 0b00001000; // aux carry
     SetFlags(valPtr);
     mem->Write(HL, valPtr);
+}
+
+void CPU::MVI_M(Memory* mem)
+{
+    // Load immediate value into memory pointer by HL
+    uint8 byte = ReadPCByte(mem);
+    mem->Write(HL, byte);
 }
 
 void CPU::STC(Memory* mem)
