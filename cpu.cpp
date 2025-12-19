@@ -107,8 +107,8 @@ uint16 CPU::PopSPWord(Memory* mem)
 void CPU::PushSPWord(Memory* mem, uint16* data)
 {
     // write a word to the stack and decrement it
-    mem->Write(SP--, *data & 0xFF);
-    mem->Write(SP--, *data >> 8);
+    mem->Write(--SP, *data & 0xFF);
+    mem->Write(--SP, *data >> 8);
 }
 
 void CPU::SetFlags(uint8 num)
