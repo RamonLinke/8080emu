@@ -54,6 +54,7 @@ public:
             struct {
                 bool C : 1;  // set if the last addition operation resulted in a carry or if the last subtraction operation required a borrow
                 const bool V : 1;  // always 1
+                const bool N : 1;  // always 0
                 bool P : 1;  // set if the number of 1 bits in the result is even.
                 bool A : 1;  // set if a carry or borrow has been generated out of the least significant four bits of the accumulator
                 const bool K : 1;  // always 0
