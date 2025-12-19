@@ -785,6 +785,12 @@ void CPU::RAR(Memory* mem)
     A = (A >> 1) | (carry << 7);
 }
 
+void CPU::LHLD(Memory* mem)
+{
+    // Load HL from immediate address
+    HL = mem->Read(ReadPCWord(mem));
+}
+
 void CPU::SHLD(Memory* mem)
 {
     // Store HL at immediate address
@@ -806,13 +812,6 @@ void CPU::DAA(Memory* mem)
         A = A + 0x60;
         flags.C = 1;
     }
-}
-
-void CPU::LHLD(Memory* mem)
-{
-    // Load HL from immediate address
-    L = ReadPCByte(mem);
-    H = ReadPCByte(mem);
 }
 
 void CPU::CMA(Memory* mem)
