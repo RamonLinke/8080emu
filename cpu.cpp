@@ -739,15 +739,10 @@ void CPU::POP_PSW(Memory* mem)
 {
     // pops A and flags from stack
     uint16 pop = PopSPWord(mem);
-    A = pop & 0xFF;
+    A = pop >> 8;
 
     // reconstruct flags
-    uint8 newFlags = pop >> 8;
-
-    // as we access the raw CPU flags, we need to ensure V is set while K and N are not
-    newFlags |= 0x2;
-    // flag K and N are always 0
-    newFlags &= ~0x18;
+    uint8 newFlags = pop & 0xFF;
 
     // access the raw cpu flags
     flags.raw = newFlags;
@@ -756,7 +751,7 @@ void CPU::POP_PSW(Memory* mem)
 void CPU::PUSH_PSW(Memory* mem)
 {
     // combine accumulator and constructed flags
-    uint16 push = uint16(flags.raw << 8) | A;
+    uint16 push = uint16(A << 8) | flags.raw;
     // push onto stack
     PushSPWord(mem, &push);
 }
