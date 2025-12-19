@@ -50,11 +50,19 @@ public:
 
     // status registers:
     struct Flags {
-        bool S;  // set if the result is negative.
-        bool Z;  // set if the result is zero.
-        bool A;  // set if a carry or borrow has been generated out of the least significant four bits of the accumulator
-        bool P;  // set if the number of 1 bits in the result is even.
-        bool C;  // set if the last addition operation resulted in a carry or if the last subtraction operation required a borrow
+        union {
+            struct {
+                bool C : 1;  // set if the last addition operation resulted in a carry or if the last subtraction operation required a borrow
+                const bool V : 1;  // always 1
+                bool P : 1;  // set if the number of 1 bits in the result is even.
+                bool A : 1;  // set if a carry or borrow has been generated out of the least significant four bits of the accumulator
+                const bool K : 1;  // always 0
+                bool Z : 1;  // set if the result is zero.
+                bool S : 1;  // set if the result is negative.
+            };
+
+            uint8 raw;
+        };
     };
 
     CPU();

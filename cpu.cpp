@@ -17,11 +17,7 @@ CPU::CPU()
     SP = 0x0;       // stack pointer
 
     // flags
-    flags.S = 0x0;  // signed
-    flags.Z = 0x0;  // zero
-    flags.A = 0x0;  // aux carry
-    flags.P = 0x0;  // parity
-    flags.C = 0x0;  // carry
+    flags.raw = 0x02; // the V flag is always set
 
     // ports, set null functions untill overwritten externally
     port_out = std::bind(NullPortOut, std::placeholders::_1, std::placeholders::_2);
@@ -733,27 +729,20 @@ void CPU::POP_PSW(Memory* mem)
     A = pop >> 8;
 
     // reconstruct flags
-    uint8 psw = pop & 0xFF;
-    flags.C = (psw >> 0) & 1;
-    flags.P = (psw >> 2) & 1;
-    flags.A = (psw >> 4) & 1;
-    flags.Z = (psw >> 6) & 1;
-    flags.S = (psw >> 7) & 1;
+    uint8 newFlags = (uint8)pop & 0xFF;
+
+    // as we access the raw CPU flags, we need to ensure V is set and K is not
+    newFlags |= 0x2;
+    newFlags &= 0xEF;
+
+    // access the raw cpu flags
+    flags.raw = newFlags;
 }
 
 void CPU::PUSH_PSW(Memory* mem)
 {
-    // push accumulator and flags to stack
-    uint8 psw = 0;
-    psw |= flags.C << 0;
-    psw |= 1 << 1; // bit 1 is always set
-    psw |= flags.P << 2;
-    psw |= flags.A << 4;
-    psw |= flags.Z << 6;
-    psw |= flags.S << 7;
-
     // combine accumulator and constructed flags
-    uint16 push = (A << 8 | psw);
+    uint16 push = (A << 8 | flags.raw);
     // push onto stack
     PushSPWord(mem, &push);
 }
