@@ -17,8 +17,8 @@ public:
     union
     {
         struct {
-            uint8 B; // register B
             uint8 C; // register C
+            uint8 B; // register B
         };
 
         uint16 BC; // B and C can be combined into BC
@@ -27,8 +27,8 @@ public:
     union
     {
         struct {
-            uint8 D; // register D
             uint8 E; // register E
+            uint8 D; // register D
         };
 
         uint16 DE; // D and E can be combined into BC
@@ -37,8 +37,8 @@ public:
     union
     {
         struct {
-            uint8 H; // register H
             uint8 L; // register L
+            uint8 H; // register H
         };
 
         uint16 HL; // H and L can be combined into HL

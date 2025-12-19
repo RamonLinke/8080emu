@@ -99,20 +99,28 @@ uint8 CPU::ReadPCByte(Memory* mem)
 uint16 CPU::ReadPCWord(Memory* mem)
 {
     // read a word at the PC and increment it
-    return mem->Read(PC++) | mem->Read(PC++) << 8;
+    uint8 low = mem->Read(PC++);
+    uint8 high = mem->Read(PC++);
+
+    return uint16(high << 8) | low;
 }
 
 uint16 CPU::PopSPWord(Memory* mem)
 {
     // read a word from the stack and increment it
-    return mem->Read(SP++) | mem->Read(SP++) << 8;
+    uint8 low = mem->Read(SP+1);
+    uint8 high = mem->Read(SP);
+    SP += 2;
+
+    return uint16(high << 8) | low;
 }
 
 void CPU::PushSPWord(Memory* mem, uint16* data)
 {
     // write a word to the stack and decrement it
-    mem->Write(--SP, *data & 0xFF);
-    mem->Write(--SP, *data >> 8);
+    SP -= 2;
+    mem->Write(SP, (*data >> 8) & 0xFF);
+    mem->Write(SP + 1, *data & 0xFF);
 }
 
 void CPU::SetFlags(uint8 num)
@@ -731,14 +739,15 @@ void CPU::POP_PSW(Memory* mem)
 {
     // pops A and flags from stack
     uint16 pop = PopSPWord(mem);
-    A = pop >> 8;
+    A = pop & 0xFF;
 
     // reconstruct flags
-    uint8 newFlags = (uint8)pop & 0xFF;
+    uint8 newFlags = pop >> 8;
 
-    // as we access the raw CPU flags, we need to ensure V is set and K is not
+    // as we access the raw CPU flags, we need to ensure V is set while K and N are not
     newFlags |= 0x2;
-    newFlags &= 0xEF;
+    // flag K and N are always 0
+    newFlags &= ~0x18;
 
     // access the raw cpu flags
     flags.raw = newFlags;
@@ -747,7 +756,7 @@ void CPU::POP_PSW(Memory* mem)
 void CPU::PUSH_PSW(Memory* mem)
 {
     // combine accumulator and constructed flags
-    uint16 push = (A << 8 | flags.raw);
+    uint16 push = uint16(flags.raw << 8) | A;
     // push onto stack
     PushSPWord(mem, &push);
 }
