@@ -492,7 +492,7 @@ void CPU::CALL(Memory* mem)
 void CPU::JMP(Memory* mem)
 {
     // move the PC to an imm address
-    PC = PopSPWord(mem);
+    PC = ReadPCWord(mem);
 }
 
 void CPU::RNZ(Memory* mem)
