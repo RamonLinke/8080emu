@@ -54,8 +54,8 @@ public:
             struct {
                 bool C : 1;  // set if the last addition operation resulted in a carry or if the last subtraction operation required a borrow
                 bool V : 1;  // initializes as 1
-                bool N : 1;  // initializes as  0
                 bool P : 1;  // set if the number of 1 bits in the result is even.
+                bool N : 1;  // initializes as 0
                 bool A : 1;  // set if a carry or borrow has been generated out of the least significant four bits of the accumulator
                 bool K : 1;  // initializes as 0
                 bool Z : 1;  // set if the result is zero.
