@@ -731,8 +731,8 @@ void CPU::PCHL(Memory* mem)
 
 void CPU::SPHL(Memory* mem)
 {
-    // Load PC from SP
-    PC = SP;
+    // Load SP from HL
+    SP = HL;
 }
 
 void CPU::POP_PSW(Memory* mem)
