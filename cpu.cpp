@@ -5,21 +5,20 @@
 
 CPU::CPU()
 {
-    // on init, set all registers and flags to 0
-    // general registers
-    A = 0x0;
-    BC = 0x0;
-    DE = 0x0;
+    // clear general registers
+    A = 0x00;
+    BC = 0x0000;
+    DE = 0x0000;
 
-    // special registers
-    HL = 0x0;       // indirect access
-    PC = 0x0;       // program counter
-    SP = 0x0;       // stack pointer
+    // clear special registers
+    HL = 0x0000;       // indirect access
+    PC = 0x0000;       // program counter
+    SP = 0x0000;       // stack pointer
 
-    // flags
-    flags.raw = 0x02; // the V flag is always set
+    // clear flags, the V flag is always set
+    flags.raw = 0x02;
 
-    // ports, set null functions untill overwritten externally
+    // clear ports, set null functions until overwritten externally
     port_out = std::bind(NullPortOut, std::placeholders::_1, std::placeholders::_2);
     port_in = std::bind(NullPortIn, std::placeholders::_1);
 
