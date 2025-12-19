@@ -526,57 +526,80 @@ void CPU::RP(Memory* mem)
 void CPU::JNZ(Memory* mem)
 {
     // jump if Z is not set
+    uint16 address = ReadPCWord(mem);
     if (!flags.Z)
-        JMP(mem);
+        PC = address;
 }
 
 void CPU::JNC(Memory* mem)
 {
     // jump if C is not set
+    uint16 address = ReadPCWord(mem);
     if (!flags.C)
-        JMP(mem);
+        PC = address;;
 }
 
 void CPU::JPO(Memory* mem)
 {
     // jump if P is not set
+    uint16 address = ReadPCWord(mem);
     if (!flags.P)
-        JMP(mem);
+        PC = address;
 }
 
 void CPU::JP(Memory* mem)
 {
     // call if S is not set
+    uint16 address = ReadPCWord(mem);
     if (!flags.S)
-        CALL(mem);
+    {
+        PushSPWord(mem, &PC);
+        PC = address;
+    }
 }
 
 void CPU::CNZ(Memory* mem)
 {
     // call if Z is not set
+    uint16 address = ReadPCWord(mem);
     if (!flags.Z)
-        CALL(mem);
+    {
+        PushSPWord(mem, &PC);
+        PC = address;
+    }
 }
 
 void CPU::CNC(Memory* mem)
 {
     // call if C is not set
+    uint16 address = ReadPCWord(mem);
     if (!flags.C)
-        CALL(mem);
+    {
+        PushSPWord(mem, &PC);
+        PC = address;
+    }
 }
 
 void CPU::CPO(Memory* mem)
 {
     // call if P is not set
+    uint16 address = ReadPCWord(mem);
     if (!flags.P)
-        CALL(mem);
+    {
+        PushSPWord(mem, &PC);
+        PC = address;
+    }
 }
 
 void CPU::CP(Memory* mem)
 {
     // call if S is not set
+    uint16 address = ReadPCWord(mem);
     if (!flags.S)
-        CALL(mem);
+    {
+        PushSPWord(mem, &PC);
+        PC = address;
+    }
 }
 
 void CPU::RZ(Memory* mem)
@@ -610,57 +633,77 @@ void CPU::RM(Memory* mem)
 void CPU::JZ(Memory* mem)
 {
     // jump if Z is set
+    uint16 address = ReadPCWord(mem);
     if (flags.Z)
-        JMP(mem);
+        PC = address;
 }
 
 void CPU::JC(Memory* mem)
 {
     // jump if C is set
+    uint16 address = ReadPCWord(mem);
     if (flags.C)
-        JMP(mem);
+        PC = address;
 }
 
 void CPU::JPE(Memory* mem)
 {
     // jump if P is set
+    uint16 address = ReadPCWord(mem);
     if (flags.P)
-        JMP(mem);
+        PC = address;
 }
 
 void CPU::JM(Memory* mem)
 {
     // jump if S is set
+    uint16 address = ReadPCWord(mem);
     if (flags.S)
-        JMP(mem);
+        PC = address;
 }
 
 void CPU::CZ(Memory* mem)
 {
     // call if Z is set
+    uint16 address = ReadPCWord(mem);
     if (flags.Z)
-        CALL(mem);
+    {
+        PushSPWord(mem, &PC);
+        PC = address;
+    }
 }
 
 void CPU::CC(Memory* mem)
 {
     // call if C is set
+    uint16 address = ReadPCWord(mem);
     if (flags.C)
-        CALL(mem);
+    {
+        PushSPWord(mem, &PC);
+        PC = address;
+    }
 }
 
 void CPU::CPE(Memory* mem)
 {
     // call if P is set
+    uint16 address = ReadPCWord(mem);
     if (flags.P)
-        CALL(mem);
+    {
+        PushSPWord(mem, &PC);
+        PC = address;
+    }
 }
 
 void CPU::CM(Memory* mem)
 {
     // call if S is set
+    uint16 address = ReadPCWord(mem);
     if (flags.S)
-        CALL(mem);
+    {
+        PushSPWord(mem, &PC);
+        PC = address;
+    }
 }
 
 void CPU::XCHG(Memory* mem)
