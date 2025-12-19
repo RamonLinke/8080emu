@@ -193,7 +193,7 @@ void CPU::DCX(uint16* reg)
     (*reg)--;
 }
 
-void CPU::MOV_RR(uint8* fromReg, uint8* toReg)
+void CPU::MOV_RR(uint8* toReg, uint8* fromReg)
 {
     // move register to register
     *toReg = *fromReg;
