@@ -95,13 +95,13 @@ uint8 CPU::ReadPCByte(Memory* mem)
 uint16 CPU::ReadPCWord(Memory* mem)
 {
     // read a word at the PC and increment it
-    return mem->Read(PC++) << 8 | mem->Read(PC++);
+    return mem->Read(PC++) | mem->Read(PC++) << 8;
 }
 
 uint16 CPU::PopSPWord(Memory* mem)
 {
     // read a word from the stack and increment it
-    return mem->Read(SP++) << 8 | mem->Read(SP++);
+    return mem->Read(SP++) | mem->Read(SP++) << 8;
 }
 
 void CPU::PushSPWord(Memory* mem, uint16* data)
