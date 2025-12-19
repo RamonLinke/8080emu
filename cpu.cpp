@@ -6,6 +6,11 @@
 
 CPU::CPU()
 {
+    Clear();
+}
+
+void CPU::Clear()
+{
     // clear general registers
     A = 0x00;
     BC = 0x0000;
@@ -33,7 +38,7 @@ CPU::CPU()
 void CPU::Reset()
 {
     // The reset signal forces execution of commands located at address 0x0000. The content of other processor registers is not modified.
-    PC = 0x0;
+    PC = 0x0000;
     halted = false;
 };
 
