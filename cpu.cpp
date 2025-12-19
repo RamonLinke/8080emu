@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <cstring>
+#include <bit>
 
 #include "cpu.h"
 
@@ -112,11 +113,8 @@ void CPU::SetFlags(uint8 num)
     flags.S = num & 0b10000000; // signed flag
     flags.Z = num == 0;         // zero flag
 
-    // calculate parity TODO: figure out if a popcnt instruction is possible?
-    uint8 parityBits = 0;
-    for (int i = 0; i < 8; i++)
-        parityBits += ((num >> i) & 1);
-
+    // calculate parity
+    uint8 parityBits = std::popcount(num);
     flags.P = (parityBits & 1) == 0;
 }
 
