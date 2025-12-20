@@ -285,7 +285,7 @@ void CPU::SUB_R(uint8* reg)
 {
     // subtracts register from A
     uint16 result16 = (uint16)A - ((uint16)*reg);
-    flags.C = !(result16 & 0xFF00);
+    flags.C = result16 & 0xFF00;
     flags.A = ((A & 0x0F) + (*reg & 0x0F)) > 0x0F;
 
     uint8 result8 = result16 & 0xFF;
@@ -317,7 +317,7 @@ void CPU::SBB_R(uint8* reg)
 {
     // subtracts register from A with borrow
     uint16 result16 = (uint16)A - ((uint16)*reg) - flags.C;
-    flags.C = !(result16 & 0xFF00);
+    flags.C = result16 & 0xFF00;
     flags.A = ((A & 0x0F) + (*reg & 0x0F)) > 0x0F;
 
     uint8 result8 = result16 & 0xFF;
@@ -330,7 +330,7 @@ void CPU::SBB_M(Memory* mem)
     // subtracts memory pointed to by HL from A with borrow
     uint8 read = mem->Read(HL);
     uint16 result16 = (uint16)A - (uint16)read - flags.C;
-    flags.C = !(result16 & 0xFF00);
+    flags.C = result16 & 0xFF00;
     flags.A = ((A & 0x0F) + (read & 0x0F)) > 0x0F;
 
     uint8 result8 = result16 & 0xFF;
