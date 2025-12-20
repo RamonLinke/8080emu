@@ -791,8 +791,9 @@ void CPU::LHLD(Memory* mem)
 void CPU::SHLD(Memory* mem)
 {
     // Store HL at immediate address
-    mem->Write(PC, ReadPCByte(mem));
-    mem->Write(PC, ReadPCByte(mem));
+    uint16 address = ReadPCWord(mem);
+    mem->Write(address, L);
+    mem->Write(++address, H);
 }
 
 void CPU::DAA(Memory* mem)
