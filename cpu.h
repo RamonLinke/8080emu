@@ -96,7 +96,7 @@ private:
 
     void PushSPWord(Memory* mem, uint16* data);
 
-    void SetFlags(uint8 num);
+    void SetSZPFlags(uint8 num);
 
     void ILL(Memory* mem);
 

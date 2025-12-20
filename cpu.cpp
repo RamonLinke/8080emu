@@ -123,15 +123,12 @@ void CPU::PushSPWord(Memory* mem, uint16* data)
     mem->Write(SP + 1, *data & 0xFF);
 }
 
-void CPU::SetFlags(uint8 num)
+void CPU::SetSZPFlags(uint8 num)
 {
     // update cpu flags based on num
-    flags.S = num & 0b10000000; // signed flag
-    flags.Z = num == 0;         // zero flag
-
-    // calculate parity
-    uint8 parityBits = std::popcount(num);
-    flags.P = (parityBits & 1) == 0;
+    flags.S = (num & 0b10000000) != 0;          // signed flag
+    flags.Z = (num == 0);                       // zero flag
+    flags.P = (std::popcount(num) & 1) == 0;    // parity flag
 }
 
 void CPU::ILL(Memory* mem)
@@ -168,14 +165,14 @@ void CPU::INR(uint8* reg)
 {
     // Increment Register
     (*reg)++;
-    SetFlags(*reg);
+    SetSZPFlags(*reg);
 }
 
 void CPU::DCR(uint8* reg)
 {
     // Increment Register
     (*reg)--;
-    SetFlags(*reg);
+    SetSZPFlags(*reg);
 }
 
 void CPU::MVI(Memory* mem, uint8* reg)
@@ -228,7 +225,7 @@ void CPU::ADD_R(uint8* reg)
     flags.A = ((A & 0x0F) + (*reg & 0x0F)) > 0x0F;
 
     uint8 result8 = result16 & 0xFF;
-    SetFlags(result8);
+    SetSZPFlags(result8);
     A = result8;
 }
 
@@ -241,7 +238,7 @@ void CPU::ADD_M(Memory* mem)
     flags.A = ((A & 0x0F) + (read & 0x0F)) > 0x0F;
 
     uint8 result8 = result16 & 0xFF;
-    SetFlags(result8);
+    SetSZPFlags(result8);
     A = result8;
 }
 
@@ -260,7 +257,7 @@ void CPU::ADC_R(uint8* reg)
     flags.A = ((A & 0x0F) + (*reg & 0x0F)) > 0x0F;
 
     uint8 result8 = result16 & 0xFF;
-    SetFlags(result8);
+    SetSZPFlags(result8);
     A = result8;
 }
 
@@ -273,7 +270,7 @@ void CPU::ADC_M(Memory* mem)
     flags.A = ((A & 0x0F) + (read & 0x0F)) > 0x0F;
 
     uint8 result8 = result16 & 0xFF;
-    SetFlags(result8);
+    SetSZPFlags(result8);
     A = result8;
 }
 
@@ -292,7 +289,7 @@ void CPU::SUB_R(uint8* reg)
     flags.A = ((A & 0x0F) + (*reg & 0x0F)) > 0x0F;
 
     uint8 result8 = result16 & 0xFF;
-    SetFlags(result8);
+    SetSZPFlags(result8);
     A = result8;
 }
 
@@ -305,7 +302,7 @@ void CPU::SUB_M(Memory* mem)
     flags.A = ((A & 0x0F) + (read & 0x0F)) > 0x0F;
 
     uint8 result8 = result16 & 0xFF;
-    SetFlags(result8);
+    SetSZPFlags(result8);
     A = result8;
 }
 
@@ -318,32 +315,32 @@ void CPU::SUI(Memory* mem)
 
 void CPU::SBB_R(uint8* reg)
 {
-    // subtracts register from A with carry
+    // subtracts register from A with borrow
     uint16 result16 = (uint16)A - ((uint16)*reg) - flags.C;
     flags.C = !(result16 & 0xFF00);
     flags.A = ((A & 0x0F) + (*reg & 0x0F)) > 0x0F;
 
     uint8 result8 = result16 & 0xFF;
-    SetFlags(result8);
+    SetSZPFlags(result8);
     A = result8;
 }
 
 void CPU::SBB_M(Memory* mem)
 {
-    // subtracts memory pointed to by HL from A with carry
+    // subtracts memory pointed to by HL from A with borrow
     uint8 read = mem->Read(HL);
     uint16 result16 = (uint16)A - (uint16)read - flags.C;
     flags.C = !(result16 & 0xFF00);
     flags.A = ((A & 0x0F) + (read & 0x0F)) > 0x0F;
 
     uint8 result8 = result16 & 0xFF;
-    SetFlags(result8);
+    SetSZPFlags(result8);
     A = result8;
 }
 
 void CPU::SBI(Memory* mem)
 {
-    // subtracts imm from A with carry
+    // subtracts imm from A with borrow
     uint8 data = ReadPCByte(mem);
     SBB_R(&data);
 }
@@ -355,7 +352,7 @@ void CPU::ANA_R(uint8* reg)
     flags.C = 0;
     flags.A = ((A & 0x0F) + (*reg & 0x0F)) > 0x0F;
 
-    SetFlags(result8);
+    SetSZPFlags(result8);
     A = result8;
 }
 
@@ -367,7 +364,7 @@ void CPU::ANA_M(Memory* mem)
     flags.C = 0;
     flags.A = ((A & 0x0F) + (read & 0x0F)) > 0x0F;
 
-    SetFlags(result8);
+    SetSZPFlags(result8);
     A = result8;
 }
 
@@ -385,7 +382,7 @@ void CPU::XRA_R(uint8* reg)
     flags.C = 0;
     flags.A = 0;
 
-    SetFlags(result8);
+    SetSZPFlags(result8);
     A = result8;
 }
 
@@ -397,7 +394,7 @@ void CPU::XRA_M(Memory* mem)
     flags.C = 0;
     flags.A = 0;
 
-    SetFlags(result8);
+    SetSZPFlags(result8);
     A = result8;
 }
 
@@ -415,7 +412,7 @@ void CPU::ORA_R(uint8* reg)
     flags.C = 0;
     flags.A = 0;
 
-    SetFlags(result8);
+    SetSZPFlags(result8);
     A = result8;
 }
 
@@ -427,7 +424,7 @@ void CPU::ORA_M(Memory* mem)
     flags.C = 0;
     flags.A = 0;
 
-    SetFlags(result8);
+    SetSZPFlags(result8);
     A = result8;
 }
 
@@ -444,7 +441,7 @@ void CPU::CMP_R(uint8* reg)
     int16 result16 = A - *reg;
     flags.C = result16 >> 8;
     flags.A = ~(A ^ result16 ^ *reg) & 0x10;
-    SetFlags(result16 & 0xFF);
+    SetSZPFlags(result16 & 0xFF);
 }
 
 void CPU::CMP_M(Memory* mem)
@@ -454,7 +451,7 @@ void CPU::CMP_M(Memory* mem)
     int16 result16 = A - read;
     flags.C = result16 >> 8;
     flags.A = ~(A ^ result16 ^ read) & 0x10;
-    SetFlags(result16 & 0xFF);
+    SetSZPFlags(result16 & 0xFF);
 }
 
 void CPU::CPI(Memory* mem)
@@ -832,7 +829,7 @@ void CPU::INR_M(Memory* mem)
     uint8 valPtr = mem->Read(HL);
     valPtr++;
     flags.A = valPtr & 0b00001000; // aux carry
-    SetFlags(valPtr);
+    SetSZPFlags(valPtr);
     mem->Write(HL, valPtr);
 }
 
@@ -842,7 +839,7 @@ void CPU::DCR_M(Memory* mem)
     uint8 valPtr = mem->Read(HL);
     valPtr--;
     flags.A = valPtr & 0b00001000; // aux carry
-    SetFlags(valPtr);
+    SetSZPFlags(valPtr);
     mem->Write(HL, valPtr);
 }
 
