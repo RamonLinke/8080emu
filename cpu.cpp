@@ -74,11 +74,15 @@ void CPU::Tick(Memory* mem)
     // grab opcodeId from the memory
     uint8 opcodeId = ReadPCByte(mem);
 
-    // get the opcode and other info from the register
+    // get the opcode and other info from storage arrays
     CPUOpcode &opcode = opcodeTable[opcodeId];
+    OpcodeData &data = opcodeData[opcodeId];
 
-    // print debug info
-    printf("0x%04X - 0x%02X\n", opcodePC, opcodeId);
+    // print disassembly
+    printf("0x%04X - %s", opcodePC, data.name.c_str());
+    for (uint8 i = 0; i < data.length - 1; i++)
+        printf(" 0x%02X", mem->Read(PC + i));
+    printf("\n");
 
     // jump to the handler function
     (this->*opcode.handler)(mem);
