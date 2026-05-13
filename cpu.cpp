@@ -789,7 +789,9 @@ void CPU::RAR(Memory* mem)
 void CPU::LHLD(Memory* mem)
 {
     // Load HL from immediate address
-    HL = mem->Read(ReadPCWord(mem));
+    uint16 address = ReadPCWord(mem);
+    L = mem->Read(address);
+    H = mem->Read(++address);
 }
 
 void CPU::SHLD(Memory* mem)
