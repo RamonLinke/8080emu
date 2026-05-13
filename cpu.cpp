@@ -594,6 +594,14 @@ void CPU::CNC(Memory* mem)
     }
 }
 
+void CPU::XTHL(Memory* mem)
+{
+    // Exchange top of the stack with HL
+    uint16 temp = HL;
+    HL = PopSPWord(mem);
+    PushSPWord(mem, &temp);
+}
+
 void CPU::CPO(Memory* mem)
 {
     // call if P is not set

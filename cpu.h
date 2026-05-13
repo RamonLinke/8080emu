@@ -371,6 +371,7 @@ private:
     void RPO(Memory* mem);
     void POP_H(Memory* mem) { POP_R(mem, &HL); }
     void JPO(Memory* mem);
+    void XTHL(Memory* mem);
     void CPO(Memory* mem);
     void PUSH_H(Memory* mem) { PUSH_R(mem, &HL); }
     void ANI(Memory* mem);
@@ -438,7 +439,7 @@ private:
     //  0xD0          0xD1          0xD2          0xD3          0xD4          0xD5          0xD6          0xD7          0xD8          0xD9          0xDA          0xDB          0xDC          0xDD          0xDE          0xDF
         &CPU::RNC,    &CPU::POP_D,  &CPU::JNC,    &CPU::OUT,    &CPU::CNC,    &CPU::PUSH_D, &CPU::SUI,    &CPU::RST2,   &CPU::RC,     &CPU::ILL,    &CPU::JC,     &CPU::IN,     &CPU::CC,     &CPU::ILL,    &CPU::SBI,    &CPU::RST3,
     //  0xE0          0xE1          0xE2          0xE3          0xE4          0xE5          0xE6          0xE7          0xE8          0xE9          0xEA          0xEB          0xEC          0xED          0xEE          0xEF
-        &CPU::RPO,    &CPU::POP_H,  &CPU::JPO,    &CPU::ILL,    &CPU::CPO,    &CPU::PUSH_H, &CPU::ANI,    &CPU::RST4,   &CPU::RPE,    &CPU::PCHL,   &CPU::JPE,    &CPU::XCHG,   &CPU::CPE,    &CPU::ILL,    &CPU::XRI,    &CPU::RST5,
+        &CPU::RPO,    &CPU::POP_H,  &CPU::JPO,    &CPU::XTHL,   &CPU::CPO,    &CPU::PUSH_H, &CPU::ANI,    &CPU::RST4,   &CPU::RPE,    &CPU::PCHL,   &CPU::JPE,    &CPU::XCHG,   &CPU::CPE,    &CPU::ILL,    &CPU::XRI,    &CPU::RST5,
     //  0xF0          0xF1          0xF2          0xF3          0xF4          0xF5          0xF6          0xF7          0xF8          0xF9          0xFA          0xFB          0xFC          0xFD          0xFE          0xFF
         &CPU::RP,     &CPU::POP_PSW,&CPU::JP,     &CPU::DI,     &CPU::CP,     &CPU::PUSH_PSW,&CPU::ORI,   &CPU::RST6,   &CPU::RM,     &CPU::SPHL,   &CPU::JM,     &CPU::EI,     &CPU::CM,     &CPU::ILL,    &CPU::CPI,    &CPU::RST7,
     };
