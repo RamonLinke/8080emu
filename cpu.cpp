@@ -765,12 +765,14 @@ void CPU::PUSH_PSW(Memory* mem)
 void CPU::RLC(Memory* mem)
 {
     // Rotate A Left (Circular)
+    flags.C = A & 0x80;
     A = (A << 1) + (A >> 7);
 }
 
 void CPU::RRC(Memory* mem)
 {
     // Rotate A Right (Circular)
+    flags.C = A & 0x01;
     A = (A >> 1) + (A << 7);
 }
 
