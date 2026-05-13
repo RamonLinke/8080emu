@@ -112,8 +112,8 @@ uint16 CPU::ReadPCWord(Memory* mem)
 uint16 CPU::PopSPWord(Memory* mem)
 {
     // read a word from the stack and increment it
-    uint8 low = mem->Read(SP+1);
-    uint8 high = mem->Read(SP);
+    uint8 low = mem->Read(SP);
+    uint8 high = mem->Read(SP+1);
     SP += 2;
 
     return uint16(high << 8) | low;
@@ -123,8 +123,8 @@ void CPU::PushSPWord(Memory* mem, uint16* data)
 {
     // write a word to the stack and decrement it
     SP -= 2;
-    mem->Write(SP, (*data >> 8) & 0xFF);
-    mem->Write(SP + 1, *data & 0xFF);
+    mem->Write(SP+1, (*data >> 8) & 0xFF);
+    mem->Write(SP, *data & 0xFF);
 }
 
 void CPU::SetSZPFlags(uint8 num)
