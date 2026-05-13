@@ -188,7 +188,11 @@ void CPU::MVI(Memory* mem, uint8* reg)
 void CPU::DAD(uint16* reg)
 {
     // Double Add; register pair is added to HL
-    HL += *reg;
+    uint32 result32 = (uint32)HL + ((uint32)*reg);
+    flags.C = result32 & 0xFFFF0000;
+
+    uint16 result16 = result32 & 0xFFFF;
+    HL = result16;
 }
 
 void CPU::LDAX(Memory* mem, uint16* reg)
