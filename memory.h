@@ -18,6 +18,8 @@ public:
     void Write(uint16 offset, uint8 val);
     void Clear();
 
+    uint8* Raw() { return data; }
+
 private:
     uint8 data[MEMORY_SIZE];
 };

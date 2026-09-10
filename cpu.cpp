@@ -79,10 +79,10 @@ void CPU::Tick(Memory* mem)
     OpcodeData &data = opcodeData[opcodeId];
 
     // print disassembly
-    printf("0x%04X - %s", opcodePC, data.name.c_str());
-    for (uint8 i = 0; i < data.length - 1; i++)
-        printf(" 0x%02X", mem->Read(PC + i));
-    printf("\n");
+   //printf("0x%04X - %s", opcodePC, data.name.c_str());
+    //for (uint8 i = 0; i < data.length - 1; i++)
+    //    printf(" 0x%02X", mem->Read(PC + i));
+    //printf("\n");
 
     // jump to the handler function
     (this->*opcode.handler)(mem);
