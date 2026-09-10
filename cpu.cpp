@@ -33,6 +33,9 @@ void CPU::Clear()
 
     // set running state
     halted = false;
+
+    // clear remaining ticks on ongoing opcode
+    remainingTicks = 0;
 }
 
 void CPU::Reset()
@@ -68,21 +71,32 @@ void CPU::Tick(Memory* mem)
     if (halted)
         return;
 
+    // still 'working' on finishing the last opcode.
+    if (remainingTicks)
+    {
+        --remainingTicks;
+        return;
+    }
+
     // track the PC before readin the opcode for the print
     uint16 opcodePC = PC;
 
     // grab opcodeId from the memory
     uint8 opcodeId = ReadPCByte(mem);
 
-    // get the opcode and other info from storage arrays
+    // get the opcode handler
     CPUOpcode &opcode = opcodeTable[opcodeId];
-    OpcodeData &data = opcodeData[opcodeId];
+    uint8 ticks = opcodeTicks[opcodeId];
 
     // print disassembly
-   //printf("0x%04X - %s", opcodePC, data.name.c_str());
+    //OpcodeData &data = opcodeData[opcodeId];
+    //printf("0x%04X - %s", opcodePC, data.name.c_str());
     //for (uint8 i = 0; i < data.length - 1; i++)
     //    printf(" 0x%02X", mem->Read(PC + i));
     //printf("\n");
+
+    // set the remaining amount of ticks required for this handler to finish.
+    remainingTicks = --ticks;
 
     // jump to the handler function
     (this->*opcode.handler)(mem);
@@ -513,28 +527,40 @@ void CPU::RNZ(Memory* mem)
 {
     // return if Z is not set
     if (!flags.Z)
+    {
+        remainingTicks += 6;
         RET(mem);
+    }
 }
 
 void CPU::RNC(Memory* mem)
 {
     // return if C is not set
     if (!flags.C)
+    {
+        remainingTicks += 6;
         RET(mem);
+    }
 }
 
 void CPU::RPO(Memory* mem)
 {
     // return if P is not set
     if (!flags.P)
+    {
+        remainingTicks += 6;
         RET(mem);
+    }
 }
 
 void CPU::RP(Memory* mem)
 {
     // return if S is not set
     if (!flags.S)
+    {
+        remainingTicks += 6;
         RET(mem);
+    }
 }
 
 void CPU::JNZ(Memory* mem)
@@ -578,6 +604,7 @@ void CPU::CNZ(Memory* mem)
     uint16 address = ReadPCWord(mem);
     if (!flags.Z)
     {
+        remainingTicks += 6;
         PushSPWord(mem, &PC);
         PC = address;
     }
@@ -589,6 +616,7 @@ void CPU::CNC(Memory* mem)
     uint16 address = ReadPCWord(mem);
     if (!flags.C)
     {
+        remainingTicks += 6;
         PushSPWord(mem, &PC);
         PC = address;
     }
@@ -608,6 +636,7 @@ void CPU::CPO(Memory* mem)
     uint16 address = ReadPCWord(mem);
     if (!flags.P)
     {
+        remainingTicks += 6;
         PushSPWord(mem, &PC);
         PC = address;
     }
@@ -619,6 +648,7 @@ void CPU::CP(Memory* mem)
     uint16 address = ReadPCWord(mem);
     if (!flags.S)
     {
+        remainingTicks += 6;
         PushSPWord(mem, &PC);
         PC = address;
     }
@@ -628,28 +658,40 @@ void CPU::RZ(Memory* mem)
 {
     // return if Z is set
     if (flags.Z)
+    {
+        remainingTicks += 6;
         RET(mem);
+    }
 }
 
 void CPU::RC(Memory* mem)
 {
     // return if C is set
     if (flags.C)
+    {
+        remainingTicks += 6;
         RET(mem);
+    }
 }
 
 void CPU::RPE(Memory* mem)
 {
     // return if P is set
     if (flags.P)
+    {
+        remainingTicks += 6;
         RET(mem);
+    }
 }
 
 void CPU::RM(Memory* mem)
 {
     // return if S is set
     if (flags.S)
+    {
+        remainingTicks += 6;
         RET(mem);
+    }
 }
 
 void CPU::JZ(Memory* mem)
@@ -690,6 +732,7 @@ void CPU::CZ(Memory* mem)
     uint16 address = ReadPCWord(mem);
     if (flags.Z)
     {
+        remainingTicks += 6;
         PushSPWord(mem, &PC);
         PC = address;
     }
@@ -701,6 +744,7 @@ void CPU::CC(Memory* mem)
     uint16 address = ReadPCWord(mem);
     if (flags.C)
     {
+        remainingTicks += 6;
         PushSPWord(mem, &PC);
         PC = address;
     }
@@ -712,6 +756,7 @@ void CPU::CPE(Memory* mem)
     uint16 address = ReadPCWord(mem);
     if (flags.P)
     {
+        remainingTicks += 6;
         PushSPWord(mem, &PC);
         PC = address;
     }
@@ -723,6 +768,7 @@ void CPU::CM(Memory* mem)
     uint16 address = ReadPCWord(mem);
     if (flags.S)
     {
+        remainingTicks += 6;
         PushSPWord(mem, &PC);
         PC = address;
     }
