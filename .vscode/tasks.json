@@ -1,0 +1,152 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "create-build-dir",
+      "type": "shell",
+      "command": "mkdir",
+      "args": [
+        "-p",
+        "build",
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "detail": "Create the build dir",
+      "problemMatcher": []
+    },
+    {
+      "label": "clean",
+      "dependsOn": ["create-build-dir"],
+      "type": "shell",
+      "command": "rm",
+      "args": [
+        "-rf",
+        "*",
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/build"
+      },
+      "detail": "Clean the Build folder",
+      "problemMatcher": []
+    },
+    {
+      "label": "generate",
+      "dependsOn": ["clean"],
+      "type": "shell",
+      "command": "cmake",
+      "args": [
+        "-G",
+        "\"Ninja Multi-Config\"",
+        "-DCMAKE_INSTALL_PREFIX='${workspaceFolder}/../build'",
+        "-DCMAKE_C_FLAGS='-fuse-ld=lld'",
+        "-DCMAKE_CXX_FLAGS='-fuse-ld=lld'",
+        "-DCMAKE_C_FLAGS_DEBUG='-O0 -g'",
+        "-DCMAKE_CXX_FLAGS_DEBUG='-O0 -g'",
+        "../"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/build"
+      },
+      "detail": "Generate",
+      "problemMatcher": []
+    },
+    {
+      "label": "build-debug",
+      "type": "shell",
+      "command": "cmake",
+      "args": [
+        "--build",
+        ".",
+        "--config",
+        "Debug",
+        "-j$(nproc)",
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/build"
+      },
+      "problemMatcher": [
+        "$gcc"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "detail": "Build Debug All"
+    },
+    {
+      "label": "install-debug",
+      "dependsOn": ["build-debug"],
+      "type": "shell",
+      "command": "cmake",
+      "args": [
+        "--install",
+        ".",
+        "--config",
+        "Debug",
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/build"
+      },
+      "problemMatcher": [],
+      "detail": "Install Debug All"
+    },
+    {
+      "label": "install-debug",
+      "dependsOn": ["build-debug"],
+      "type": "shell",
+      "command": "cmake",
+      "args": [
+        "--install",
+        ".",
+        "--config",
+        "Debug",
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/build"
+      },
+      "problemMatcher": [],
+      "detail": "Install Debug"
+    },
+    {
+      "label": "build-release",
+      "type": "shell",
+      "command": "cmake",
+      "args": [
+        "--build",
+        ".",
+        "--config",
+        "Release",
+        "-j$(nproc)",
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/build"
+      },
+      "problemMatcher": [
+        "$gcc"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      },
+      "detail": "Build Release"
+    },
+    {
+      "label": "install-release",
+      "dependsOn": ["build-release"],
+      "type": "shell",
+      "command": "cmake",
+      "args": [
+        "--install",
+        ".",
+        "--config",
+        "Release",
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/build"
+      },
+      "problemMatcher": [],
+      "detail": "Install Release"
+    },
+  ]
+}

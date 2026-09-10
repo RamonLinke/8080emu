@@ -1,6 +1,6 @@
-#define uint8 unsigned char
-#define uint16 unsigned short
-#define uint32 unsigned int
-#define int8 signed char
-#define int16 signed short
-#define int32 signed int
+#define uint8 __uint8_t
+#define uint16 __uint16_t
+#define uint32 __uint32_t
+#define int8 __int8_t
+#define int16 __int16_t
+#define int32 __int32_t
