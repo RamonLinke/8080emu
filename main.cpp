@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
     if (!loadFile(argv[1], memory))
         return 0;
 
-    while (1)
+    while (!cpu->IsHalted())
     {
         cpu->Tick(memory);
     }

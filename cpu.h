@@ -77,6 +77,8 @@ public:
     void SetPortOutHandler(std::function<void(uint8 port, uint8 data)> func);
     void SetPortInHandler(std::function<uint8(uint8 port)> func);
 
+    bool IsHalted() { return halted; }
+
 private:
 
     Flags flags;
