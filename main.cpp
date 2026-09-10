@@ -81,9 +81,9 @@ bool loadFile(const char* filePath, Memory* memory)
 void loadCPM80(CPU* cpu, Memory* memory)
 {
     // WBOOT - JMP WBOOT - Jump to 0x0100
-    memory->Write(0x0000, 0xC3); // JMP
-    memory->Write(0x0001, 0x00); // jump target lowbyte
-    memory->Write(0x0002, 0x01); // jump target highbyte
+    memory->Write(0x0000, 0xD3); // OUT
+    memory->Write(0x0001, 0x00); // out port
+    memory->Write(0x0002, 0xC9); // RET
 
     // IOBYTE
     memory->Write(0x0003, 0x00); // null
@@ -93,26 +93,43 @@ void loadCPM80(CPU* cpu, Memory* memory)
 
     // BDOS - out A to port 1
     memory->Write(0x0005, 0xD3); // OUT
-    memory->Write(0x0006, 0x01); // out port
+    memory->Write(0x0006, 0x00); // out port
     memory->Write(0x0007, 0xC9); // RET
 
     // set the cpm80 bios call handler
     cpu->SetPortOutHandler(cpm80_port_out);
 }
 
-void cpm80_port_out(uint8 port, uint8 value) 
+void cpm80_port_out(uint8 port, uint8 value)
 {
-    if (port == 1) { // handle cpm80 BDOS call
-        uint8 operation = cpu->C;
-
-        if (operation == 2) { // print a character stored in E
-            printf("%c", cpu->E);
+    uint16 address = cpu->PC;
+    switch (address)
+    {
+        case 0x0002: // WBOOT
+        {
+            printf("\n", cpu->E); // print a newline as the cpu 'rebooted'
+            cpu->PC = 0x0100; // start at 0x0100
+            break;
         }
-        else if (operation == 9) { // print from memory at (DE) until '$' char
-            uint16 addr = (cpu->D << 8) | cpu->E;
-            do {
-                printf("%c", memory->Read(addr++));
-            } while (memory->Read(addr) != '$');
+        case 0x0007: // BDOS
+        {
+            uint8 operation = cpu->C;
+
+            if (operation == 2)
+            {
+                // print a character stored in E
+                printf("%c", cpu->E);
+            }
+            else if (operation == 9)
+            {
+                // print from memory at (DE) until '$' char
+                uint16 addr = (cpu->D << 8) | cpu->E;
+                do
+                {
+                    printf("%c", memory->Read(addr++));
+                } while (memory->Read(addr) != '$');
+            }
+            break;
         }
     }
 }
