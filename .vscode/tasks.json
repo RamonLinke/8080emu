@@ -39,8 +39,6 @@
         "-G",
         "\"Ninja Multi-Config\"",
         "-DCMAKE_INSTALL_PREFIX='${workspaceFolder}/../build'",
-        "-DCMAKE_C_FLAGS='-fuse-ld=lld'",
-        "-DCMAKE_CXX_FLAGS='-fuse-ld=lld'",
         "-DCMAKE_C_FLAGS_DEBUG='-O0 -g'",
         "-DCMAKE_CXX_FLAGS_DEBUG='-O0 -g'",
         "../"
