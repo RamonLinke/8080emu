@@ -5,8 +5,17 @@
 
 Memory::Memory()
 {
-    // clear the memory on Init
+    // clear the memory
     Clear();
+}
+
+Memory::Memory(uint8 initData[MEMORY_SIZE])
+{
+    // clear the memory
+    Clear();
+
+    // initialize memory with the given data
+    memcpy(data, initData, MEMORY_SIZE);
 }
 
 uint8 Memory::Read(uint16 offset)
