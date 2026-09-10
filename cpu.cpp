@@ -105,7 +105,7 @@ void CPU::Tick(Memory* mem)
 void CPU::Halt()
 {
     halted = true;
-    printf("CPU Halted externally");
+    printf("CPU Halted externally\n");
 }
 
 uint8 CPU::ReadPCByte(Memory* mem)
@@ -965,5 +965,5 @@ void CPU::HLT(Memory* mem)
 {
     // halt the CPU
     halted = true;
-    printf("CPU Halted at 0x%04X", PC);
+    printf("CPU Halted at 0x%04X\n", PC);
 }

@@ -107,8 +107,18 @@ void cpm80_port_out(uint8 port, uint8 value)
     {
         case 0x0002: // WBOOT
         {
-            printf("\n", cpu->E); // print a newline as the cpu 'rebooted'
-            cpu->PC = 0x0100; // start at 0x0100
+            static bool initialBoot = true;
+            if (initialBoot)
+            {
+                initialBoot = false;
+                cpu->PC = 0x0100;                         // start at 0x0100
+            }                
+            else
+            {
+                printf("\n"); // print a newline as the cpu halted.
+                cpu->Halt();
+            }
+  
             break;
         }
         case 0x0007: // BDOS
