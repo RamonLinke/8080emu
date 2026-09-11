@@ -1,12 +1,14 @@
 #include "cpu.h"
 #include "memory.h"
 
+#include <string.h>
+#include <signal.h>
 #include <iostream>
 #include <vector>
-#include <string.h>
 #include <chrono>
 #include <thread>
 
+void interruptHandler(int s);
 bool loadFile(const char*, Memory* memory);
 void loadCPM80(CPU* cpu, Memory* memory);
 static void cpm80_port_out(uint8 port, uint8 value);
@@ -22,14 +24,17 @@ int main(int argc, char *argv[])
         return 0;
     }
 
-    // load the 'bios' 
+    // set up signal/interrupt handler
+    signal(SIGINT, interruptHandler);
+
+    // load the 'bios'
     loadCPM80(cpu, memory);
 
     // load the given file
     if (!loadFile(argv[1], memory))
         return 0;
 
-    while (!cpu->IsHalted())
+    while (true)
     {
         cpu->Tick(memory);
 
@@ -41,6 +46,12 @@ int main(int argc, char *argv[])
     delete memory;
 
     return 0;
+}
+
+void interruptHandler(int s)
+{
+    // Send RST0
+    cpu->Interrupt(0xC7);
 }
 
 bool loadFile(const char* filePath, Memory* memory)
