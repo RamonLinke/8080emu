@@ -50,8 +50,8 @@ int main(int argc, char *argv[])
 
 void interruptHandler(int s)
 {
-    // Send RST0
-    cpu->Interrupt(0xC7);
+    // Send an RST0 interrupt
+    cpu->Interrupt(CPUOpcode::RST0);
 }
 
 bool loadFile(const char* filePath, Memory* memory)
@@ -96,10 +96,10 @@ bool loadFile(const char* filePath, Memory* memory)
 // loads the CP/M-80 BIOS
 void loadCPM80(CPU* cpu, Memory* memory)
 {
-    // WBOOT - JMP WBOOT - Jump to 0x0100
-    memory->Write(0x0000, 0xD3); // OUT
+    // WBOOT - OUT A to port 0
+    memory->Write(0x0000, CPUOpcode::OUT);
     memory->Write(0x0001, 0x00); // out port
-    memory->Write(0x0002, 0xC9); // RET
+    memory->Write(0x0002, CPUOpcode::RET);
 
     // IOBYTE
     memory->Write(0x0003, 0x00); // null
@@ -107,10 +107,10 @@ void loadCPM80(CPU* cpu, Memory* memory)
     // Drive Byte (null)
     memory->Write(0x0004, 0x00); // null
 
-    // BDOS - out A to port 1
-    memory->Write(0x0005, 0xD3); // OUT
+    // BDOS - OUT A to port 0
+    memory->Write(0x0005, CPUOpcode::OUT);
     memory->Write(0x0006, 0x00); // out port
-    memory->Write(0x0007, 0xC9); // RET
+    memory->Write(0x0007, CPUOpcode::RET);
 
     // set the cpm80 bios call handler
     cpu->SetPortOutHandler(cpm80_port_out);
