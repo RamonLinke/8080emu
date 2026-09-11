@@ -29,7 +29,8 @@ void CPU::Clear()
     port_in = std::bind(NullPortIn, std::placeholders::_1);
 
     // disable interrupts until explicitly enabled
-    interrupts = false;
+    interruptEnabled = false;
+    interruptPendingOpcode = 0;
 
     // set running state
     halted = false;
@@ -44,6 +45,18 @@ void CPU::Reset()
     PC = 0x0000;
     halted = false;
 };
+
+void CPU::Interrupt(uint8 opcode)
+{
+    // ensure interrupts are enabled
+    if (!interruptEnabled)
+        return;
+
+    // disable further interrupts untill manually enabled again
+    interruptEnabled = false;
+
+    interruptPendingOpcode = opcode;
+}
 
 void CPU::SetPortOutHandler(std::function<void(uint8, uint8)> func)
 {
@@ -68,9 +81,6 @@ uint8 CPU::NullPortIn(uint8 port)
 
 void CPU::Tick(Memory* mem)
 {
-    if (halted)
-        return;
-
     // still 'working' on finishing the last opcode.
     if (remainingTicks)
     {
@@ -78,11 +88,24 @@ void CPU::Tick(Memory* mem)
         return;
     }
 
-    // track the PC before readin the opcode for the print
-    uint16 opcodePC = PC;
+    uint8 opcodeId;
+    if (interruptPendingOpcode)
+    {
+        // handle interrupt, handle the injected instruction
+        opcodeId = interruptPendingOpcode;
+        interruptPendingOpcode = 0;
 
-    // grab opcodeId from the memory
-    uint8 opcodeId = ReadPCByte(mem);
+        // after an interrupt, the cpu is no longer halted
+        halted = false;
+    }
+    else
+    {
+        if (halted)
+            return;
+
+        // read the next opcode from memory
+        opcodeId = ReadPCByte(mem);
+    }
 
     // get the opcode handler
     CPUOpcode &opcode = opcodeTable[opcodeId];
@@ -952,13 +975,13 @@ void CPU::IN(Memory* mem)
 void CPU::DI(Memory* mem)
 {
     // disable interrupts
-    interrupts = false;
+    interruptEnabled = false;
 }
 
 void CPU::EI(Memory* mem)
 {
     // enable interrupts
-    interrupts = true;
+    interruptEnabled = true;
 }
 
 void CPU::HLT(Memory* mem)

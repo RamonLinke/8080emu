@@ -74,6 +74,7 @@ public:
     void Halt();
     void Reset();
     void Clear();
+    void Interrupt(uint8 opcode);
     void SetPortOutHandler(std::function<void(uint8 port, uint8 data)> func);
     void SetPortInHandler(std::function<uint8(uint8 port)> func);
 
@@ -82,7 +83,8 @@ public:
 private:
 
     Flags flags;
-    bool interrupts;
+    bool interruptEnabled;
+    uint8 interruptPendingOpcode;
     bool halted;
     uint8 remainingTicks;
 
