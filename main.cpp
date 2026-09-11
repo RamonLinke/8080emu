@@ -4,6 +4,8 @@
 #include <iostream>
 #include <vector>
 #include <string.h>
+#include <chrono>
+#include <thread>
 
 bool loadFile(const char*, Memory* memory);
 void loadCPM80(CPU* cpu, Memory* memory);
@@ -30,6 +32,9 @@ int main(int argc, char *argv[])
     while (!cpu->IsHalted())
     {
         cpu->Tick(memory);
+
+        // emulate CPU at 125khz
+        std::this_thread::sleep_for(std::chrono::microseconds(1000000/125000));
     }
 
     delete cpu;
