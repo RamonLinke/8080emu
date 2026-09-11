@@ -112,11 +112,12 @@ void CPU::Tick(Memory* mem)
     uint8 ticks = opcodeTicks[opcodeId];
 
     // print disassembly
-    //OpcodeData &data = opcodeData[opcodeId];
-    //printf("0x%04X - %s", opcodePC, data.name.c_str());
-    //for (uint8 i = 0; i < data.length - 1; i++)
-    //    printf(" 0x%02X", mem->Read(PC + i));
-    //printf("\n");
+    /*OpcodeData &data = opcodeData[opcodeId];
+    uint16 opcodePC = PC;
+    printf("0x%04X - %s", opcodePC, data.name.c_str());
+    for (uint8 i = 0; i < data.length - 1; i++)
+        printf(" 0x%02X", mem->Read(PC + i));
+    printf("\n");*/
 
     // set the remaining amount of ticks required for this handler to finish.
     remainingTicks = --ticks;
