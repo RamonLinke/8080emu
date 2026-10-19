@@ -300,9 +300,10 @@ void CPU::ADI(Memory* mem)
 void CPU::ADC_R(uint8* reg)
 {
     // adds register to A with carry
-    uint16 result16 = (uint16)A + ((uint16)*reg) + flags.C;
+    uint8 carry = flags.C;
+    uint16 result16 = (uint16)A + ((uint16)*reg) + carry;
     flags.C = result16 & 0xFF00;
-    flags.A = ((A & 0x0F) + (*reg & 0x0F)) > 0x0F;
+    flags.A = ((A & 0x0F) + (*reg & 0x0F) + carry) > 0x0F;
 
     uint8 result8 = result16 & 0xFF;
     SetSZPFlags(result8);
@@ -313,9 +314,10 @@ void CPU::ADC_M(Memory* mem)
 {
     // add from register to memory pointed by HL to A with carry
     uint8 read = mem->Read(HL);
-    uint16 result16 = (uint16)A + (uint16)read + flags.C;
+    uint8 carry = flags.C;
+    uint16 result16 = (uint16)A + (uint16)read + carry;
     flags.C = result16 & 0xFF00;
-    flags.A = ((A & 0x0F) + (read & 0x0F)) > 0x0F;
+    flags.A = ((A & 0x0F) + (read & 0x0F) + carry) > 0x0F;
 
     uint8 result8 = result16 & 0xFF;
     SetSZPFlags(result8);
@@ -334,7 +336,7 @@ void CPU::SUB_R(uint8* reg)
     // subtracts register from A
     uint16 result16 = (uint16)A - ((uint16)*reg);
     flags.C = result16 & 0xFF00;
-    flags.A = ((A & 0x0F) + (*reg & 0x0F)) > 0x0F;
+    flags.A = ~(A ^ result16 ^ *reg) & 0x10;
 
     uint8 result8 = result16 & 0xFF;
     SetSZPFlags(result8);
@@ -347,7 +349,7 @@ void CPU::SUB_M(Memory* mem)
     uint8 read = mem->Read(HL);
     uint16 result16 = (uint16)A - (uint16)read;
     flags.C = result16 & 0xFF00;
-    flags.A = ((A & 0x0F) + (read & 0x0F)) > 0x0F;
+    flags.A = ~(A ^ result16 ^ read) & 0x10;
 
     uint8 result8 = result16 & 0xFF;
     SetSZPFlags(result8);
@@ -366,7 +368,7 @@ void CPU::SBB_R(uint8* reg)
     // subtracts register from A with borrow
     uint16 result16 = (uint16)A - ((uint16)*reg) - flags.C;
     flags.C = result16 & 0xFF00;
-    flags.A = ((A & 0x0F) + (*reg & 0x0F)) > 0x0F;
+    flags.A = ~(A ^ result16 ^ *reg) & 0x10;
 
     uint8 result8 = result16 & 0xFF;
     SetSZPFlags(result8);
@@ -379,7 +381,7 @@ void CPU::SBB_M(Memory* mem)
     uint8 read = mem->Read(HL);
     uint16 result16 = (uint16)A - (uint16)read - flags.C;
     flags.C = result16 & 0xFF00;
-    flags.A = ((A & 0x0F) + (read & 0x0F)) > 0x0F;
+    flags.A = ~(A ^ result16 ^ read) & 0x10;
 
     uint8 result8 = result16 & 0xFF;
     SetSZPFlags(result8);
@@ -398,7 +400,7 @@ void CPU::ANA_R(uint8* reg)
     // AND A with register
     uint8 result8 = A & *reg;
     flags.C = 0;
-    flags.A = ((A & 0x0F) + (*reg & 0x0F)) > 0x0F;
+    flags.A = ((A | *reg) & 0x08) != 0;
 
     SetSZPFlags(result8);
     A = result8;
@@ -410,7 +412,7 @@ void CPU::ANA_M(Memory* mem)
     uint8 read = mem->Read(HL);
     uint8 result8 = A & read;
     flags.C = 0;
-    flags.A = ((A & 0x0F) + (read & 0x0F)) > 0x0F;
+    flags.A = ((A | read) & 0x08) != 0;
 
     SetSZPFlags(result8);
     A = result8;
