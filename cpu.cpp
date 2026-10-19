@@ -921,7 +921,7 @@ void CPU::INR_M(Memory* mem)
     // Increment Memory at [HL]
     uint8 valPtr = mem->Read(HL);
     valPtr++;
-    flags.A = valPtr & 0b00001000; // aux carry
+    flags.A = (valPtr & 0x0F) == 0x00; // aux carry
     SetSZPFlags(valPtr);
     mem->Write(HL, valPtr);
 }
@@ -931,7 +931,7 @@ void CPU::DCR_M(Memory* mem)
     // Decrement Memory at [HL]
     uint8 valPtr = mem->Read(HL);
     valPtr--;
-    flags.A = valPtr & 0b00001000; // aux carry
+    flags.A = (valPtr & 0x0F) != 0x0F; // aux carry
     SetSZPFlags(valPtr);
     mem->Write(HL, valPtr);
 }
