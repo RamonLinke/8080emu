@@ -207,6 +207,7 @@ void CPU::INR(uint8* reg)
 {
     // Increment Register
     (*reg)++;
+    flags.A = (*reg & 0x0F) == 0x00;
     SetSZPFlags(*reg);
 }
 
