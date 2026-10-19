@@ -212,8 +212,9 @@ void CPU::INR(uint8* reg)
 
 void CPU::DCR(uint8* reg)
 {
-    // Increment Register
+    // Decrement Register
     (*reg)--;
+    flags.A = (*reg & 0x0F) != 0x0F;
     SetSZPFlags(*reg);
 }
 
