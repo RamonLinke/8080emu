@@ -825,8 +825,8 @@ void CPU::POP_PSW(Memory* mem)
     uint16 pop = PopSPWord(mem);
     A = pop >> 8;
 
-    // reconstruct flags
-    uint8 newFlags = pop & 0xFF;
+    // reconstruct flags, bit 1 is always 1 and bits 3 and 5 are always 0
+    uint8 newFlags = (pop & 0xD7) | 0x02;
 
     // access the raw cpu flags
     flags.raw = newFlags;
