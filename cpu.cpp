@@ -890,17 +890,27 @@ void CPU::SHLD(Memory* mem)
 void CPU::DAA(Memory* mem)
 {
     // Decimal Adjust Accumulator
-    uint8 old_A = A;
-    if (((A & 0x0F) > 9) || flags.A)
+    uint8 correction = 0;
+    bool carry = flags.C;
+    uint8 lsb = A & 0x0F;
+    uint8 msb = A >> 4;
+
+    // adjust the low nibble, if it overflowed or is not a valid digit
+    if (flags.A || lsb > 9)
+        correction |= 0x06;
+
+    // adjust the high nibble, if it overflowed or will be after the low nibble adjustment
+    if (flags.C || msb > 9 || (msb >= 9 && lsb > 9))
     {
-        A = A + 6;
-        flags.A = 1;
+        correction |= 0x60;
+        carry = true;
     }
-    if (A > 0x99 || flags.C)
-    {
-        A = A + 0x60;
-        flags.C = 1;
-    }
+
+    // add correction
+    ADD_R(&correction);
+
+    // set carry
+    flags.C = carry;
 }
 
 void CPU::CMA(Memory* mem)
