@@ -615,13 +615,10 @@ void CPU::JPO(Memory* mem)
 
 void CPU::JP(Memory* mem)
 {
-    // call if S is not set
+    // jump if S is not set
     uint16 address = ReadPCWord(mem);
     if (!flags.S)
-    {
-        PushSPWord(mem, &PC);
         PC = address;
-    }
 }
 
 void CPU::CNZ(Memory* mem)
