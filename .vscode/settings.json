@@ -1,0 +1,14 @@
+{
+    // C++ TestMate: show the GoogleTest tests in the Testing sidebar
+    "testMate.cpp.test.executables": "build/Debug/emulator_tests",
+    "testMate.cpp.test.workingDirectory": "${workspaceFolder}/build/Debug",
+    "testMate.cpp.debug.configTemplate": {
+        "type": "cppdbg",
+        "MIMode": "gdb",
+        "program": "${exec}",
+        "args": "${argsArray}",
+        "cwd": "${cwd}",
+        "env": "${envObj}",
+        "externalConsole": false
+    }
+}

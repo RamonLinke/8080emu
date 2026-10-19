@@ -146,5 +146,35 @@
       "problemMatcher": [],
       "detail": "Install Release"
     },
+    {
+      "label": "test",
+      "dependsOn": ["build-debug"],
+      "type": "shell",
+      "command": "ctest",
+      "args": [
+        "-C",
+        "Debug",
+        "--output-on-failure",
+        "-j$(nproc)",
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/build"
+      },
+      "problemMatcher": {
+        "owner": "gtest",
+        "fileLocation": "absolute",
+        "pattern": {
+          "regexp": "^(.*):(\\d+): (Failure)$",
+          "file": 1,
+          "line": 2,
+          "message": 3
+        }
+      },
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "detail": "Build Debug and run all tests"
+    },
   ]
 }

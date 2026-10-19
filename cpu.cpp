@@ -126,6 +126,23 @@ void CPU::Tick(Memory* mem)
     (this->*opcode.handler)(mem);
 }
 
+uint8 CPU::Step(Memory* mem)
+{
+    // finish the opcode that is still in progress
+    while (remainingTicks)
+        Tick(mem);
+
+    // run the next opcode and all of its ticks
+    uint8 ticks = 0;
+    do
+    {
+        Tick(mem);
+        ++ticks;
+    } while (remainingTicks);
+
+    return ticks;
+}
+
 void CPU::Halt()
 {
     halted = true;

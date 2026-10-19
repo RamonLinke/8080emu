@@ -119,6 +119,14 @@ public:
     void SetPortInHandler(std::function<uint8(uint8 port)> func);
 
     bool IsHalted() { return halted; }
+    bool IsInterruptEnabled() { return interruptEnabled; }
+
+    // ticks until the next opcode has fully finished, returns the amount of ticks it took
+    uint8 Step(Memory* mem);
+
+    // raw access to the status flags, layout: S Z 0 A 0 P 1 C
+    uint8 GetFlags() { return flags.raw; }
+    void SetFlags(uint8 raw) { flags.raw = raw; }
 
 private:
 
