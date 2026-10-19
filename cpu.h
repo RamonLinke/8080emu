@@ -156,7 +156,7 @@ private:
     void DAD(uint16* reg);
     void LDAX(Memory* mem, uint16* reg);
     void DCX(uint16* reg);
-    void MOV_RR(uint8* fromReg, uint8* toReg);
+    void MOV_RR(uint8* toReg, uint8* fromReg);
     void MOV_RM(Memory* mem, uint8* reg);
     void MOV_MR(Memory* mem, uint8* reg);
     void ADD_R(uint8* reg);
